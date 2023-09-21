@@ -1,64 +1,72 @@
 import 'dart:convert';
-import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:flutter_onboarding/const/api_constants.dart';
+import 'package:flutter_onboarding/models/product.dart';
+import 'package:flutter_onboarding/services/addproductservice.dart';
+import 'package:flutter_onboarding/ui/admin/products_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
 
-class ProductService {
-  // Replace this with your API base URL
-  static const String baseUrl = 'YOUR_API_BASE_URL';
+class AddProductApi {
+  static var _filename;
+  static var imageFile;
 
-  // Add product function
-  static Future<bool> addProduct(
-      String name,
-      String description,
-      String price,
-      String size,
-      String humidity,
-      String temperature,
-      String rating,
-      String imageFilePath,
-      String category,
-      ) async {
-    try {
-      final uri = Uri.parse('$baseUrl/api/add_product');
-      final request = http.MultipartRequest('POST', uri);
+  static Future<Product> product(BuildContext context, String name, String price,
+      String size, String description, /*String rating,*/ String humidity,
+      String temperature, String category) async {
+    SharedPreferences localstorage = await SharedPreferences.getInstance();
 
-      // Add fields
-      request.fields['name'] = name;
-      request.fields['description'] = description;
-      request.fields['price'] = price;
-      request.fields['size'] = size;
-      request.fields['humidity'] = humidity;
-      request.fields['temperature'] = temperature;
-      request.fields['rating'] = rating;
-      request.fields['category'] = category;
+    /*int? userId = localstorage.getInt('user_id');
 
-      // Add image file
-      final imageFile = File(imageFilePath);
-      final imageStream = http.ByteStream(imageFile.openRead());
-      final imageLength = await imageFile.length();
-      final imageFileName = basename(imageFilePath);
+    if (userId == null) {
+      throw Exception('User ID is null');
 
-      final multipartFile = http.MultipartFile(
-        'image',
-        imageStream,
-        imageLength,
-        filename: imageFileName,
-      );
+    }*/
 
-      request.files.add(multipartFile);
+      final urls = APIConstants.url + APIConstants.product;
+      print(urls);
 
-      // Send the request
+      var request = await http.MultipartRequest('POST', Uri.parse(urls));
+      /*request.fields["plantId"] = pl.toString();*/
+      request.fields["plantname"] = name;
+      request.fields["ptprice"] = price;
+      request.fields["ptdescription"] = description;
+      request.fields["ptsize"] = size;
+      request.fields["pthumidity"] = humidity;
+      request.fields["pttemp"] = temperature;/*
+      request.fields["ptrating"] = rating;*/
+      request.fields["category"] = category;
+
+      print("request ${request.fields}");
+
+      if (imageFile != null) {
+        final imageStream = http.ByteStream(imageFile!.openRead());
+        final imageLength = await imageFile!.length();
+
+        final multipartFile = await http.MultipartFile(
+          'images',
+          imageStream,
+          imageLength,
+          filename: _filename,
+        );
+        request.files.add(multipartFile);
+        print("filename $_filename");
+      } else {
+        // Handle the case where imageFile is null or provide a default image
+        // You can choose to throw an error, use a default image, or handle it differently.
+      }
+
       final response = await request.send();
 
       if (response.statusCode == 201) {
-        return true; // Product added successfully
+        print('Form submitted successfully');
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ProductsScreen()));
+
+        return Product.fromJson(jsonDecode(await response.stream.bytesToString()));
       } else {
-        return false; // Failed to add product
+        print('Error submitting form. Status code: ${response.statusCode}');
+        throw Exception('Failed to add product');
       }
-    } catch (e) {
-      print('Error adding product: $e');
-      return false;
     }
   }
-}
+

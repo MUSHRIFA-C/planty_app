@@ -6,10 +6,13 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 class ProductsScreen extends StatefulWidget {
-  ProductsScreen({Key? key, required int plantId}) : super(key: key);
+  ProductsScreen();
+
 
   @override
   State<ProductsScreen> createState() => _ProductsScreenState();
+
+
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
@@ -175,11 +178,11 @@ class ProductCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  /*const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: onEditPressed, // Call the callback function on edit button press
                     child: Text('Edit'), // Change to your desired button text
-                  ),
+                  ),*/
                 ],
               ),
             ),

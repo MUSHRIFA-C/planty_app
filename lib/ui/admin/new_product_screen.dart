@@ -1,72 +1,82 @@
-import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/constants.dart';
 import 'package:flutter_onboarding/models/product.dart';
-import 'package:flutter_onboarding/ui/admin/products_screen.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
+import 'package:flutter_onboarding/services/addproductservice.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 class Aaddproducts extends StatefulWidget {
   const Aaddproducts({Key? key}) : super(key: key);
 
   @override
-  _AaddproductsState createState() => _AaddproductsState();
+  State<Aaddproducts> createState() => _AaddproductsState();
 }
 
 class _AaddproductsState extends State<Aaddproducts> {
-  List<String> categories = [
-    'Recommended',
-    'Indoor',
-    'Outdoor',
-    'Garden',
-    // Add more categories as needed
+
+  TextEditingController plantIdController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+  TextEditingController sizeController = TextEditingController();
+  TextEditingController humidityController = TextEditingController();
+  TextEditingController temperatureController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController ratingController = TextEditingController();
+  TextEditingController categoryController = TextEditingController();
+
+
+
+  /*ViewCategoryApi viewcategories = ViewCategoryApi();*/
+  String? category;
+  List items=[
+    "Recommended",
+    "Garden",
+    "Outdoor",
+    "Indoor",
+
+
   ];
 
-  late SharedPreferences prefs;
-  late String _filename;
+  String? dropDownvalue;
   File? imageFile;
-  late final bytes;
-  int? plantId;// Declare plantId as an int with a nullable type
 
-  TextEditingController nameController = TextEditingController(); // Add this
-  TextEditingController priceController = TextEditingController(); // Add this
-  TextEditingController sizeController = TextEditingController(); // Add this
-  TextEditingController humidityController = TextEditingController(); // Add this
-  TextEditingController temperatureController = TextEditingController(); // Add this
-  TextEditingController descriptionController = TextEditingController(); // Add this
-  TextEditingController ratingController = TextEditingController();
-
-
-
-
+  late  final _filename;
+  late  final bytes;
 
   Future<void> _showChoiceDialog(BuildContext context) {
     return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Choose from"),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                GestureDetector(
-                  child: const Text("Gallery"),
-                  onTap: () {
-                    _getFromGallery();
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Choose from"),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  GestureDetector(
+                    child: const Text("Gallery"),
+                    onTap: () {
+                      _getFromGallery();
+                      Navigator.pop(context);
+                      //  _openGallery(context);
+                    },
+                  ),
+                 /* SizedBox(height: 10),
+                  const Padding(padding: EdgeInsets.all(0.0)),
+                  GestureDetector(
+                    child: const Text("Camera"),
+                    onTap: () {
 
+
+                      Navigator.pop(context);
+                      //   _openCamera(context);
+                    },
+                  ),*/
+                ],
+              ),
+            ),
+          );
+        });
+  }
   _getFromGallery() async {
     final picker = ImagePicker();
     try {
@@ -93,163 +103,330 @@ class _AaddproductsState extends State<Aaddproducts> {
       print("Error picking image from gallery: $e");
     }
   }
-
-  TextFormField _buildTextFormField(String hintText, TextEditingController controller, String? initialValue) {
-    return TextFormField(
-      controller: controller,
-      decoration: InputDecoration(hintText: hintText),
-      onChanged: (value) {
-        // Handle text field changes
-      },
+ /* /// Get from Camera
+  _getFromCamera() async {
+    PickedFile? pickedFile = await ImagePicker().getImage(
+      source: ImageSource.camera,
+      maxWidth: 1800,
+      maxHeight: 1800,
     );
-  }
-
+    if (pickedFile != null) {
+      setState(() {
+        imageFile = File(pickedFile.path);
+        //  _filename = basename(imageFile!.path).toString();
+        final _nameWithoutExtension = basenameWithoutExtension(imageFile!.path);
+        final _extenion = extension(imageFile!.path);
+      });
+    }
+  }*/
+  @override
   Widget build(BuildContext context) {
-    final Product newProduct = Product(data: Data());
 
-    Data? newProductData = Data();
+    final Product newProduct = Product(data: Data());
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add product'),
+        backgroundColor: Constants.primaryColor,
+        leading:
+        IconButton(onPressed: () {
+          Navigator.pop(context);
+        }, icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.white,)),
+        title: Text('Add Product'),
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 100,
-                child: Card(
-                  margin: EdgeInsets.zero,
-                  color: Colors.blue,
-                  child: Row(
-                    children: [
-                      IconButton(
-                        onPressed: () async {
-                          _showChoiceDialog(context);
-                        },
-                        icon: const Icon(
-                          Icons.add_circle,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const Text(
-                        'Add an Image',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
+        child: Column(
+
+          children: [
+            SizedBox(height: 20,),
+          Container(
+              padding: const EdgeInsets.all(10),
+              child: TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+                controller: plantIdController,
+                decoration: const InputDecoration(
+
+                  border: OutlineInputBorder(),
+                  labelText: 'plantId ',
+                  hintText: 'plantId ',
                 ),
               ),
-              const SizedBox(height: 20),
-              const Text(
-                'Product Information',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+            ),
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+                controller: nameController,
+                decoration: const InputDecoration(
+
+                  border: OutlineInputBorder(),
+                  labelText: 'Name',
+                  hintText: 'Name',
                 ),
               ),
-              _buildTextFormField('Product Name', nameController, newProduct.data!.name),
-              _buildTextFormField('Product Price', priceController, newProduct.data!.price),
-              _buildTextFormField('Product Size', sizeController, newProduct.data!.size),
-              _buildTextFormField('Product Rating', ratingController, '0' /* or a default value */), // Initial rating
-              _buildTextFormField('Product Humidity', humidityController, '0' /* or a default value */), // Initial humidity
-              _buildTextFormField('Product Temperature', temperatureController, '0' /* or a default value */), // Initial temperature
-              _buildTextFormField('Product Description', descriptionController, newProduct.data!.description),
-              DropdownButtonFormField<String>(
-                iconSize: 20,
-                decoration: const InputDecoration(hintText: 'Product Category'),
-                value: newProduct.data!.category,
-                items: categories.map((category) {
-                  return DropdownMenuItem<String>(
-                    value: category,
-                    child: Text(category),
+            ),
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+                controller: priceController,
+                decoration: const InputDecoration(
+
+                  border: OutlineInputBorder(),
+                  labelText: 'Price',
+                  hintText: 'Price',
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+                controller: sizeController,
+                decoration: const InputDecoration(
+
+                  border: OutlineInputBorder(),
+                  labelText: 'size',
+                  hintText: 'size',
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+                controller: descriptionController,
+                decoration: const InputDecoration(
+
+                  border: OutlineInputBorder(),
+                  labelText: 'Description',
+                  hintText: 'Description',
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+                controller: humidityController,
+                decoration: const InputDecoration(
+
+                  border: OutlineInputBorder(),
+                  labelText: 'Humidity ',
+                  hintText:  'Humidity ',
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+                controller: temperatureController,
+                decoration: const InputDecoration(
+
+                  border: OutlineInputBorder(),
+                  labelText: 'Temparature ',
+                  hintText: 'Temparature ',
+                ),
+              ),
+            ),
+
+
+            SizedBox(height: 20,),
+/*            FutureBuilder<List<cate>>(
+              future: viewcategories.getCategories(),
+              builder: (BuildContext context, AsyncSnapshot<List<ViewCategoryModel>> snapshot) {
+                if (snapshot.hasData) {
+                  List<ViewCategoryModel> categories = snapshot.data!;
+                  return SizedBox(
+                    width: 350,
+                    child: DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        disabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+                        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+                      ),
+                      hint: Text('Categories'),
+                      value: dropDownvalue,
+
+                      items: categories.map((category) {
+                        return DropdownMenuItem<String>(
+                          value: category.id.toString(),
+                          child: Text(
+                            '${category.name} ',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (type) {
+                        setState(() {
+
+                          dropDownvalue = type;
+                          print("dropdownvalue $dropDownvalue");
+                        });
+                      },
+                    ),
                   );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    newProduct.data!.category = value;
-                  });
+                }
+                return const Center(child: CircularProgressIndicator());
+              },
+            ),*/
+            /*DropdownButtonFormField<String>(
+              iconSize: 20,
+              decoration: const InputDecoration(hintText: 'Product Category'),
+              value: newProduct.data!.category,
+              items: categories.map((category) {
+                return DropdownMenuItem<String>(
+                  value: category,
+                  child: Text(category),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  newProduct.data!.category = value;
+                  dropDownvalue = newProduct.data!.category;
+                  print("dropDownvalue $dropDownvalue");
+                });
+              },
+            ),*/
+            Card(
+              child: SizedBox(
+                width: double.maxFinite,
+                child: DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5)) ,
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                    ),
+                    hint: Text('CLASS OF VEHICLES AUTHORISED TO BE DRIVEN'),
+                    value: newProduct.data!.category,
+                    items: items
+                        .map((type) => DropdownMenuItem<String>(
+                      value: type.toString(),
+                      child: Text(
+                        type.toString(),
+                        style: TextStyle(color: Colors.black,fontSize: 16),
+                      ),
+                    ))
+                        .toList(),
+                    onChanged: (type) {
+                      setState(() {
+                        newProduct.data!.category;
+                      });
+                    }),
+              ),
+            ),
+
+            SizedBox(height: 60,),
+            Container(
+
+              child: imageFile == null
+                  ? Container(
+                child: Column(
+                  children: <Widget>[
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Constants.primaryColor,
+                      ),
+                      onPressed: () {
+                        //    _getFromGallery();
+                        _showChoiceDialog(context);
+                      },
+                      child: Text("Upload Image"),
+                    ),
+                    Container(
+                      height: 40.0,
+                    ),
+
+                  ],
+                ),
+              ): Row(
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Image.file(
+                      imageFile!,
+                      width: 100,
+                      height: 100,
+                      //  fit: BoxFit.cover,
+                    ),
+                  ), ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Constants.primaryColor,
+                    ),
+                    onPressed: () {
+                      //    _getFromGallery();
+                      _showChoiceDialog(context);
+                    },
+                    child: Text("Upload Image"),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 40,),
+            SizedBox(
+              height: 60,
+              width: 350,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Constants.primaryColor,
+                ),
+                child: const Text('Submit',style: TextStyle(fontSize: 25),),
+                onPressed: () {
+                  AddProductApi.product(context,
+                      nameController.text,
+                      priceController.text,
+                      sizeController.text,
+                      descriptionController.text,
+                      /*ratingController.text,*/
+                      humidityController.text,
+                      temperatureController.text,
+                    newProduct.data!.category.toString(),
+                  );
+                  print("product $nameController.text");
                 },
               ),
-              SizedBox(height: 20),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => ProductsScreen(plantId: plantId ?? 0), // Provide a default value or handle the null case
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.teal.shade800,
-                    padding: EdgeInsets.symmetric(horizontal: 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: const Text(
-                    'Save',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+
+
+          ],
         ),
       ),
+
     );
   }
 }
-
-
-
-/*
-class Data {
-  String? name;
-  String? price;
-  String? description;
-  String? size;
-  String? humidity;
-  String? temperature;
-  String? rating;
-  String? image;
-  String? category;
-
-  Data({
-    this.name,
-    this.price,
-    this.description,
-    this.size,
-    this.humidity,
-    this.temperature,
-    this.rating,
-    this.image,
-    this.category,
-  });
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = this.name;
-    data['price'] = this.price;
-    data['description'] = this.description;
-    data['size'] = this.size;
-    data['humidity'] = this.humidity;
-    data['temperature'] = this.temperature;
-    data['rating'] = this.rating;
-    data['image'] = this.image;
-    data['category'] = this.category;
-    return data;
-  }
-}
-*/
