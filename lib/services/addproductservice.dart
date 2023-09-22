@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/const/api_constants.dart';
 import 'package:flutter_onboarding/models/product.dart';
@@ -8,12 +9,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class AddProductApi {
-  static var _filename;
-  static var imageFile;
 
   static Future<Product> product(BuildContext context, String name, String price,
       String size, String description, /*String rating,*/ String humidity,
-      String temperature, String category) async {
+      String temperature, String category,File? imageFile ) async {
+
     SharedPreferences localstorage = await SharedPreferences.getInstance();
 
     /*int? userId = localstorage.getInt('user_id');
@@ -47,10 +47,10 @@ class AddProductApi {
           'images',
           imageStream,
           imageLength,
-          filename: _filename,
+          filename: imageFile.path.split('/').last,
         );
         request.files.add(multipartFile);
-        print("filename $_filename");
+        print("filename ${imageFile.path.split('/').last}");
       } else {
         // Handle the case where imageFile is null or provide a default image
         // You can choose to throw an error, use a default image, or handle it differently.

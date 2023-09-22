@@ -72,13 +72,13 @@ class _RootPageState extends State<RootPage> {
         index: _bottomNavIndex,
         children: _widgetOptions(),
       ),
-      floatingActionButton: FloatingActionButton(
+      /*floatingActionButton: FloatingActionButton(
         onPressed: (){
           //Navigator.push(context, PageTransition(child: const ScanPage(), type: PageTransitionType.bottomToTop));
         },
         child: Image.asset('assets/images/code-scan-two.png', height: 30.0,),
         backgroundColor: Constants.primaryColor,
-      ),
+      ),*/
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar(
           splashColor: Constants.primaryColor,

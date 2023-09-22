@@ -33,8 +33,6 @@ class _AaddproductsState extends State<Aaddproducts> {
     "Garden",
     "Outdoor",
     "Indoor",
-
-
   ];
 
   String? dropDownvalue;
@@ -60,17 +58,7 @@ class _AaddproductsState extends State<Aaddproducts> {
                       //  _openGallery(context);
                     },
                   ),
-                 /* SizedBox(height: 10),
-                  const Padding(padding: EdgeInsets.all(0.0)),
-                  GestureDetector(
-                    child: const Text("Camera"),
-                    onTap: () {
 
-
-                      Navigator.pop(context);
-                      //   _openCamera(context);
-                    },
-                  ),*/
                 ],
               ),
             ),
@@ -103,22 +91,7 @@ class _AaddproductsState extends State<Aaddproducts> {
       print("Error picking image from gallery: $e");
     }
   }
- /* /// Get from Camera
-  _getFromCamera() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
-      maxWidth: 1800,
-      maxHeight: 1800,
-    );
-    if (pickedFile != null) {
-      setState(() {
-        imageFile = File(pickedFile.path);
-        //  _filename = basename(imageFile!.path).toString();
-        final _nameWithoutExtension = basenameWithoutExtension(imageFile!.path);
-        final _extenion = extension(imageFile!.path);
-      });
-    }
-  }*/
+
   @override
   Widget build(BuildContext context) {
 
@@ -138,7 +111,7 @@ class _AaddproductsState extends State<Aaddproducts> {
 
           children: [
             SizedBox(height: 20,),
-          Container(
+            Container(
               padding: const EdgeInsets.all(10),
               child: TextFormField(
                 validator: (value) {
@@ -332,8 +305,8 @@ class _AaddproductsState extends State<Aaddproducts> {
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5)),
                     ),
-                    hint: Text('CLASS OF VEHICLES AUTHORISED TO BE DRIVEN'),
-                    value: newProduct.data!.category,
+                    hint: Text('CATEGORY'),
+                    value: dropDownvalue,
                     items: items
                         .map((type) => DropdownMenuItem<String>(
                       value: type.toString(),
@@ -345,7 +318,7 @@ class _AaddproductsState extends State<Aaddproducts> {
                         .toList(),
                     onChanged: (type) {
                       setState(() {
-                        newProduct.data!.category;
+                        dropDownvalue=type;
                       });
                     }),
               ),
@@ -408,14 +381,15 @@ class _AaddproductsState extends State<Aaddproducts> {
                 child: const Text('Submit',style: TextStyle(fontSize: 25),),
                 onPressed: () {
                   AddProductApi.product(context,
-                      nameController.text,
-                      priceController.text,
-                      sizeController.text,
-                      descriptionController.text,
-                      /*ratingController.text,*/
-                      humidityController.text,
-                      temperatureController.text,
-                    newProduct.data!.category.toString(),
+                    nameController.text,
+                    priceController.text,
+                    sizeController.text,
+                    descriptionController.text,
+                    /*ratingController.text,*/
+                    humidityController.text,
+                    temperatureController.text,
+                    dropDownvalue.toString(),
+                    imageFile,
                   );
                   print("product $nameController.text");
                 },

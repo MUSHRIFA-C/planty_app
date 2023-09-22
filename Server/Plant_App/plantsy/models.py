@@ -20,7 +20,7 @@ class product(models.Model):
     temparature = models.CharField(max_length =50, null= True)
     rating = models.CharField(max_length =50, null= True)
     image = models.ImageField(upload_to = 'images/', null=True)
-    category=models.ForeignKey(Categories,on_delete=models.CASCADE)
+    category=models.CharField(max_length =50, null= True)
     
 
     def __str__(self):
