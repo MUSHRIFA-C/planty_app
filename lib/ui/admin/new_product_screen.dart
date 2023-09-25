@@ -95,7 +95,7 @@ class _AaddproductsState extends State<Aaddproducts> {
   @override
   Widget build(BuildContext context) {
 
-    final Product newProduct = Product(data: Data());
+   // final Product newProduct = Product(data: Data());
 
     return Scaffold(
       appBar: AppBar(

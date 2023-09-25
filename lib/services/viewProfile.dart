@@ -4,8 +4,6 @@ import 'package:flutter_onboarding/const/api_constants.dart';
 import 'package:flutter_onboarding/models/user.dart';
 import 'package:http/http.dart' as http;
 
-
-
 class ViewProfileAPI{
 
   Future<User> getViewProfile(int userId) async {

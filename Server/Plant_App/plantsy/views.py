@@ -206,14 +206,14 @@ class Update_productAPIView(GenericAPIView):
 
 class viewuserProfile(GenericAPIView):
     def get(self,request,id):
-        queryset=outsiders.objects.get(pk=id)
+        queryset=register.objects.get(pk=id)
         serializer=registererializer(queryset)
         return Response({'data':serializer.data,'message':'Single user data','success':True},status=status.HTTP_200_OK)
     
 class updateuserProfile(GenericAPIView):
     serializer_class = registererializer
     def put(self,request,id):
-        queryset=outsiders.objects.get(pk=id)
+        queryset=register.objects.get(pk=id)
         print(queryset)
         serializer=registererializer(instance=queryset,data=request.data,partial=True)
         print(serializer)

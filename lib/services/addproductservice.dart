@@ -10,13 +10,16 @@ import 'package:http/http.dart' as http;
 
 class AddProductApi {
 
-  static Future<Product> product(BuildContext context, String name, String price,
-      String size, String description, /*String rating,*/ String humidity,
+  static Future<Product> product(
+      BuildContext context,
+      String name, String price,
+      String size, String description,
+      /*String rating,*/ String humidity,
       String temperature, String category,File? imageFile ) async {
 
-    SharedPreferences localstorage = await SharedPreferences.getInstance();
+    /*SharedPreferences localstorage = await SharedPreferences.getInstance();
 
-    /*int? userId = localstorage.getInt('user_id');
+    *//*int? userId = localstorage.getInt('user_id');
 
     if (userId == null) {
       throw Exception('User ID is null');
@@ -60,7 +63,8 @@ class AddProductApi {
 
       if (response.statusCode == 201) {
         print('Form submitted successfully');
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ProductsScreen()));
+
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Productview()));
 
         return Product.fromJson(jsonDecode(await response.stream.bytesToString()));
       } else {

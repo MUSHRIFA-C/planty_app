@@ -1,20 +1,25 @@
 class Product {
-  Data? data;
+  List<DetailData>? detaildata;
   String? message;
   bool? success;
 
-  Product({this.data, this.message, this.success});
+  Product({this.detaildata, this.message, this.success});
 
   Product.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    if (json['data'] != null) {
+      detaildata = <DetailData>[];
+      json['data'].forEach((v) {
+        detaildata!.add(new DetailData.fromJson(v));
+      });
+    }
     message = json['message'];
     success = json['success'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
+    if (this.detaildata != null) {
+      data['data'] = this.detaildata!.map((v) => v.toJson()).toList();
     }
     data['message'] = this.message;
     data['success'] = this.success;
@@ -22,7 +27,7 @@ class Product {
   }
 }
 
-class Data {
+class DetailData {
   int? id;
   String? name;
   String? price;
@@ -30,11 +35,11 @@ class Data {
   String? size;
   String? humidity;
   String? temparature;
-  String? rating;
+  Null? rating;
   String? image;
   String? category;
 
-  Data(
+  DetailData(
       {this.id,
         this.name,
         this.price,
@@ -46,7 +51,7 @@ class Data {
         this.image,
         this.category});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  DetailData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     price = json['price'];
