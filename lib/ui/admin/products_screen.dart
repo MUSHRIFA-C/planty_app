@@ -37,23 +37,21 @@ class _ProductviewState extends State<Productview> {
           )
         ],
       ),
-      body: FutureBuilder<List<Product>>(
+      body: FutureBuilder<Product>(
         future: ViewProductService.getProducts(),
-        builder: (BuildContext context, AsyncSnapshot<List<Product>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<Product> snapshot) {
+
           if (snapshot.hasData) {
+            print('snapshot data');
+            print(snapshot.data!.detaildata);
+
             return ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.vertical,
-              itemCount: snapshot.data!.length,
+              itemCount: snapshot.data?.detaildata?.length,
               itemBuilder: (context, index) {
-                final productData = snapshot.data![index];
-                final detailData = productData.detaildata;
 
-                if (detailData != null && detailData.isNotEmpty) {
-                  final firstDetail = detailData[0];
-
-                  final name = firstDetail.name ?? "Default Name";
-                  final image = firstDetail.image ?? "Default Image URL";
+                print(snapshot.data?.detaildata?[index].image);
 
                   return GestureDetector(
                     onTap: () {
@@ -71,11 +69,11 @@ class _ProductviewState extends State<Productview> {
                               radius: 50.0,
                               backgroundColor: Constants.primaryColor,
                               backgroundImage: NetworkImage(
-                                APIConstants.url + image,
+                                APIConstants.url + snapshot.data!.detaildata![index].image!,
                               ),
                             ),
                             title: Text(
-                              name,
+                              snapshot.data!.detaildata![index].name!,
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             trailing: ElevatedButton(
@@ -98,12 +96,12 @@ class _ProductviewState extends State<Productview> {
                       ),
                     ),
                   );
-                } else {
+                },
+                /*else {
                   return Container(
                     child: Text("No detail data available"),
                   );
-                }
-              },
+              },*/
             );
           }
           return Center(child: CircularProgressIndicator());

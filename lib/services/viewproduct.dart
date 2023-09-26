@@ -1,11 +1,10 @@
 import 'dart:convert';
-import 'dart:math';
+import 'package:http/http.dart' as http;
 import 'package:flutter_onboarding/const/api_constants.dart';
 import 'package:flutter_onboarding/models/product.dart';
-import 'package:http/http.dart' as http;
 
 class ViewProductService {
-  static Future<List<Product>> getProducts() async {
+  static Future<Product> getProducts() async {
 
 
     try {
@@ -19,9 +18,10 @@ class ViewProductService {
       if (response.statusCode == 200) {
         var body = json.decode(response.body);
         print("body$body");
+        Product data = Product.fromJson(body);
 
-        List<Product> data = List<Product>.from(
-            body['data'].map((e) => Product.fromJson(e)).toList());
+        // List<Product> data = List<Product>.from(
+        //     body['data'].map<Product>((e) => Product.fromJson(e)).toList());
 
         print("data$data");
 
