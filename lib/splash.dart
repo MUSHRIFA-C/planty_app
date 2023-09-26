@@ -1,6 +1,6 @@
-
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_onboarding/ui/admin/home_screen.dart';
 import 'package:flutter_onboarding/ui/onboarding_screen.dart';
 import 'package:flutter_onboarding/ui/screens/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,6 +16,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   late SharedPreferences localStorage;
   String user="user";
+  String admin = "admin";
   String role="";
 
 
@@ -26,9 +27,14 @@ class _SplashScreenState extends State<SplashScreen> {
     if (role == user) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => HomePage()));
-    } else {
+    } else if(role == admin){
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => Homescreen()));
+    }
+    else{
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (_) => OnboardingScreen()));
+
     }
   }
 

@@ -4,6 +4,7 @@ import 'package:flutter_onboarding/constants.dart';
 import 'package:flutter_onboarding/models/product.dart';
 import 'package:flutter_onboarding/services/viewproduct.dart';
 import 'package:flutter_onboarding/ui/admin/new_product_screen.dart';
+import 'package:flutter_onboarding/ui/admin/productupdate.dart';
 
 class Productview extends StatefulWidget {
   const Productview({Key? key}) : super(key: key);
@@ -81,13 +82,13 @@ class _ProductviewState extends State<Productview> {
                                 primary: Constants.primaryColor,
                               ),
                               onPressed: () {
-                                /*Navigator.push(
+                                Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        Productupdate(id: productData.id!),
+                                        Productupdate(id: snapshot.data!.detaildata![index].id!),
                                   ),
-                                );*/
+                                );
                               },
                               child: const Text('Update'),
                             ),

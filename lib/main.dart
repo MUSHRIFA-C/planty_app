@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_onboarding/splash.dart';
 
 import 'ui/onboarding_screen.dart';
 
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Onboarding Screen',
-      home: OnboardingScreen(),
+      home: SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

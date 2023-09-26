@@ -2,6 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_onboarding/models/product.dart';
+import 'package:flutter_onboarding/services/viewproduct.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_onboarding/constants.dart';
 import 'package:flutter_onboarding/services/updateservice.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path/path.dart';
@@ -17,31 +21,11 @@ class Productupdate extends StatefulWidget {
 }
 
 class _ProductupdateState extends State<Productupdate> {
-  List _loaddata = [];
-
-  _fetchData() async {
-    // Fetch data from your API
-    // ...
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchData();
-    _viewPro();
-  }
-
-  late int id;
-  String name = '';
-  String price = '';
-  String size = '';
-  String description = '';
-  String humidity = '';
-  String temperature = '';
-  String category = '';
-  File? imageFile;
 
   late SharedPreferences prefs;
+  late int id;
+
+
   TextEditingController plantIdController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController priceController = TextEditingController();
@@ -51,27 +35,68 @@ class _ProductupdateState extends State<Productupdate> {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController ratingController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
+  String name = '';
+  String price = '';
+  String size = '';
+  String description = '';
+  String humidity = '';
+  String temperature = '';
+  String category = '';
+  File? imageFile;
 
-
+  late Product product;
   int currentTab = 2;
+  var dropdownvalue;
+  List _loaddata = [];
 
-  Future<void> _viewPro() async {
-    // Fetch product details from your API
-    // ...
+
+  @override
+  void initState() {
+    super.initState();
+    print("id${widget.id}");
+    _fetchData(widget.id);
   }
+  Future<void> _fetchData(int uId) async {
+    try {
+      final details = await ViewProductService().getViewProduct(uId);
+      if (details != null) {
+        setState(() {
+          product = details;
+          if (product.detaildata != null && product.detaildata!.isNotEmpty) {
+            // Check if detaildata is not null and not empty
+            name = product.detaildata![0].name!;
+            price = product.detaildata![0].price!;
+            size = product.detaildata![0].size!;
+            nameController.text = name;
+            priceController.text = price;
+            sizeController.text = size;
+          } else {
+            // Handle the case where detaildata is null or empty (optional)
+            print('Failed to fetch user details: detaildata is null or empty');
+          }
+        });
+      } else {
+        // Handle the case where details is null (optional)
+        print('Failed to fetch user details: details is null');
+      }
+    } catch (e) {
+      // Handle errors here, e.g., show an error message
+      print('Failed to fetch user details: $e');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    var dropdownvalue;
-
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Constants.primaryColor,
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [Colors.blue, Colors.purple],
+              colors: [Constants.primaryColor],
             ),
           ),
         ),
@@ -79,23 +104,13 @@ class _ProductupdateState extends State<Productupdate> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.black),
+          icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.white),
         ),
-        title: Text('Add product'),
+        title: Text('Edit product'),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 20,),
-            Container(
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                controller: plantIdController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
             Container(
               padding: const EdgeInsets.all(10),
               child: TextField(
@@ -201,8 +216,7 @@ class _ProductupdateState extends State<Productupdate> {
                     onPressed: () {
                       ProductUpdateService.updateProduct(
                         context,
-                        plantIdController as int,
-                        nameController.text,
+                       nameController.text,
                         priceController.text,
                         sizeController.text,
                         humidityController.text,
@@ -222,7 +236,7 @@ class _ProductupdateState extends State<Productupdate> {
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.deepPurple,
+                      primary: Constants.primaryColor,
                       padding: EdgeInsets.symmetric(horizontal: 50, vertical: 25,),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                     ),
@@ -240,7 +254,7 @@ class _ProductupdateState extends State<Productupdate> {
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.deepPurple,
+                      primary: Constants.primaryColor,
                       padding: EdgeInsets.symmetric(horizontal: 50, vertical: 25,),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                     ),

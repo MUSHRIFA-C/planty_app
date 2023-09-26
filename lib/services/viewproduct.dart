@@ -16,16 +16,11 @@ class ViewProductService {
       print(APIConstants.url+ APIConstants.viewproduct);
 
       if (response.statusCode == 200) {
+
         var body = json.decode(response.body);
         print("body$body");
         Product data = Product.fromJson(body);
-
-        // List<Product> data = List<Product>.from(
-        //     body['data'].map<Product>((e) => Product.fromJson(e)).toList());
-
-        print("data$data");
-
-        return data;
+    return data;
 
 
       } else {
@@ -33,6 +28,20 @@ class ViewProductService {
       }
     } catch (e) {
       throw Exception('Error: $e');
+    }
+  }
+
+  Future<Product> getViewProduct(int id) async {
+
+    final urls = APIConstants.url + APIConstants.viewsingleproduct + id.toString();
+    var response = await http.get(Uri.parse(urls));
+    var body = json.decode(response.body);
+    print(body);
+    if (response.statusCode == 200) {
+      return Product.fromJson(body['data']);
+    }
+    else {
+      throw Exception('Failed to load product details');
     }
   }
 }

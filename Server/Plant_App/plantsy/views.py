@@ -155,7 +155,7 @@ class ViewCategoryAPIView(GenericAPIView):
 #             return Response({'data':'No data available','success':False},status=status.HTTP_400_BAD_REQUEST)
 
 
-        #view all users
+        #view all product
 
 class Get_All_productAPIView(GenericAPIView):
     serializer_class = productserializer
@@ -169,7 +169,7 @@ class Get_All_productAPIView(GenericAPIView):
             return Response({'data': 'non data available', 'success': False}, status = status.HTTP_201_CREATED)
 
 
-        #view single user
+        #view single product admin
 
 class Get_single_productAPIView(GenericAPIView):
     def get(self,request,id):

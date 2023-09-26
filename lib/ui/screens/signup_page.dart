@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/constants.dart';
 import 'package:flutter_onboarding/models/user.dart';
-import 'package:flutter_onboarding/services/apiservices.dart';
+import 'package:flutter_onboarding/services/registerservices.dart';
 import 'package:flutter_onboarding/ui/root_page.dart';
 import 'package:flutter_onboarding/ui/screens/widgets/custom_textfield.dart';
 import 'package:flutter_onboarding/ui/screens/signin_page.dart';

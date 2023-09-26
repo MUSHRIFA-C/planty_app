@@ -111,24 +111,7 @@ class _AaddproductsState extends State<Aaddproducts> {
 
           children: [
             SizedBox(height: 20,),
-            Container(
-              padding: const EdgeInsets.all(10),
-              child: TextFormField(
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter some text';
-                  }
-                  return null;
-                },
-                controller: plantIdController,
-                decoration: const InputDecoration(
 
-                  border: OutlineInputBorder(),
-                  labelText: 'plantId ',
-                  hintText: 'plantId ',
-                ),
-              ),
-            ),
             Container(
               padding: const EdgeInsets.all(10),
               child: TextFormField(

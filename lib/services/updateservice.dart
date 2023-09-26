@@ -11,7 +11,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ProductUpdateService {
   static Future<void> updateProduct(
       BuildContext context,
-      int id,
       String name,
       String price,
       String size,
@@ -24,11 +23,10 @@ class ProductUpdateService {
       ) async {
 
     //SharedPreferences prefs = await SharedPreferences.getInstance();
-    final urls = APIConstants.url + APIConstants.product;
+    final urls = APIConstants.url + APIConstants.updateproduct;
     print(urls);
 
     var request = await http.MultipartRequest('POST', Uri.parse(urls));
-    request.fields["plantId"] = id.toString();
     request.fields["plantname"] = name;
     request.fields["ptprice"] = price;
     request.fields["ptdescription"] = description;
