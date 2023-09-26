@@ -9,6 +9,7 @@ urlpatterns = [
      path('Update_productAPIView/<int:id>',views.Update_productAPIView.as_view(), name='Update_productAPIView'),
      path('UserRegisterAPIView',views.UserRegisterAPIView.as_view(), name='UserRegisterAPIView'),
      path('LoginAPIView',views.LoginAPIView.as_view(), name='LoginAPIView'),
+     path('ViewAllUserAPIView',views.ViewAllUserAPIView.as_view(), name='ViewAllUserAPIView'),
 
      path("ViewCategoryAPIView",views.ViewCategoryAPIView.as_view(),name='ViewCategoryAPIView'),
      # path("ViewPlantSingleCategoryAPIView/<int:id>",views.ViewPlantSingleCategoryAPIView.as_view(),name='ViewPlantSingleCategoryAPIView'),

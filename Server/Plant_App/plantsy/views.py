@@ -90,6 +90,16 @@ class LoginAPIView(GenericAPIView):
                 }, status = status.HTTP_400_BAD_REQUEST)
 
 
+class ViewAllUserAPIView(GenericAPIView):
+    serializer_class=registererializer
+    def get(self,request):
+        queryset=register.objects.all()
+        if(queryset.count()>0):
+            serializer=registererializer(queryset,many=True)
+            return Response({'data':serializer.data,'message':'all user ','success':True},status=status.HTTP_200_OK)
+        else:
+            return Response({'data':'No data available','success':False},status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class AddProductAPIView(GenericAPIView):

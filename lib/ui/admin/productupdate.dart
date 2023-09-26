@@ -14,6 +14,7 @@ import 'package:flutter_onboarding/const/api_constants.dart';
 
 class Productupdate extends StatefulWidget {
   final int id;
+
   Productupdate({required this.id});
 
   @override
@@ -48,37 +49,34 @@ class _ProductupdateState extends State<Productupdate> {
   int currentTab = 2;
   var dropdownvalue;
   List _loaddata = [];
+  var data;
 
 
   @override
   void initState() {
     super.initState();
     print("id${widget.id}");
-    _fetchData(widget.id);
+    _fetchData();
   }
-  Future<void> _fetchData(int uId) async {
+
+  Future<void> _fetchData() async {
     try {
-      final details = await ViewProductService().getViewProduct(uId);
-      if (details != null) {
-        setState(() {
-          product = details;
-          if (product.detaildata != null && product.detaildata!.isNotEmpty) {
-            // Check if detaildata is not null and not empty
-            name = product.detaildata![0].name!;
-            price = product.detaildata![0].price!;
-            size = product.detaildata![0].size!;
-            nameController.text = name;
-            priceController.text = price;
-            sizeController.text = size;
-          } else {
-            // Handle the case where detaildata is null or empty (optional)
-            print('Failed to fetch user details: detaildata is null or empty');
-          }
-        });
-      } else {
-        // Handle the case where details is null (optional)
-        print('Failed to fetch user details: details is null');
-      }
+      setState(() {
+        name =data['data']['name'];
+        price = data['data']['price'];
+        size = data['data']['size'];
+        description = data['data']['description'];
+        humidity = data['data']['humidity'];
+        temperature =data['data']['temparature'];
+        nameController.text=name;
+        priceController.text=price;
+        descriptionController.text=description;
+        sizeController.text=size;
+        humidityController.text=humidity;
+        temperatureController.text=temperature;
+
+      });
+
     } catch (e) {
       // Handle errors here, e.g., show an error message
       print('Failed to fetch user details: $e');
@@ -108,163 +106,180 @@ class _ProductupdateState extends State<Productupdate> {
         ),
         title: Text('Edit product'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                controller: priceController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                controller: sizeController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                controller: humidityController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                controller: temperatureController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                controller: descriptionController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                controller: categoryController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
+      body: Center(
+        child: FutureBuilder<Map<String, dynamic>>(
+          future: ViewProductService().fetchData(widget.id), // Call the API function
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else if (!snapshot.hasData || snapshot.data == null) {
+              return Text('No data available');
+            } else {
+              data = snapshot.data!;
 
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: SizedBox(
-                width: double.maxFinite,
-                child: DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    disabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      child: TextField(
+                        controller: nameController,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      child: TextField(
+                        controller: priceController,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
                     ),
-                  ),
-                  hint: Text('Categories'),
-                  value: dropdownvalue,
-                  items: _loaddata
-                      .map((type) => DropdownMenuItem<String>(
-                    value: type['id'].toString(),
-                    child: Text(
-                      type['name'].toString(),
-                      style: TextStyle(color: Colors.black),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      child: TextField(
+                        controller: sizeController,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
                     ),
-                  ))
-                      .toList(),
-                  onChanged: (type) {
-                    setState(() {
-                      dropdownvalue = type!;
-                    });
-                  },
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      child: TextField(
+                        controller: humidityController,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      child: TextField(
+                        controller: temperatureController,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      child: TextField(
+                        controller: descriptionController,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      child: TextField(
+                        controller: categoryController,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: SizedBox(
+                        width: double.maxFinite,
+                        child: DropdownButtonFormField<String>(
+                          decoration: InputDecoration(
+                            disabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                          hint: Text('Categories'),
+                          value: dropdownvalue,
+                          items: _loaddata
+                              .map((type) => DropdownMenuItem<String>(
+                            value: type['id'].toString(),
+                            child: Text(
+                              type['name'].toString(),
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ))
+                              .toList(),
+                          onChanged: (type) {
+                            setState(() {
+                              dropdownvalue = type!;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 70,),
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              ProductUpdateService.updateProduct(
+                                context,
+                                nameController.text,
+                                priceController.text,
+                                sizeController.text,
+                                humidityController.text,
+                                temperatureController.text,
+                                descriptionController.text,
+                                categoryController.text,
+                                imageFile,
+
+                              );
+                            },
+                            child: Text(
+                              "Edit",
+                              style: TextStyle(
+                                fontSize: 15,
+                                letterSpacing: 2,
+                                color: Colors.white,
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Constants.primaryColor,
+                              padding: EdgeInsets.symmetric(horizontal: 50, vertical: 25,),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              ProductUpdateService.deleteProduct(context, widget.id);
+                            },
+                            child: Text(
+                              "Delete",
+                              style: TextStyle(
+                                fontSize: 15,
+                                letterSpacing: 2,
+                                color: Colors.white,
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Constants.primaryColor,
+                              padding: EdgeInsets.symmetric(horizontal: 50, vertical: 25,),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ),
-            SizedBox(height: 70,),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      ProductUpdateService.updateProduct(
-                        context,
-                       nameController.text,
-                        priceController.text,
-                        sizeController.text,
-                        humidityController.text,
-                        temperatureController.text,
-                        descriptionController.text,
-                        categoryController.text,
-                        imageFile,
-                        /*dropdownvalue,*/
-                      );
-                    },
-                    child: Text(
-                      "Edit",
-                      style: TextStyle(
-                        fontSize: 15,
-                        letterSpacing: 2,
-                        color: Colors.white,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: Constants.primaryColor,
-                      padding: EdgeInsets.symmetric(horizontal: 50, vertical: 25,),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      ProductUpdateService.deleteProduct(context, widget.id);
-                    },
-                    child: Text(
-                      "Delete",
-                      style: TextStyle(
-                        fontSize: 15,
-                        letterSpacing: 2,
-                        color: Colors.white,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: Constants.primaryColor,
-                      padding: EdgeInsets.symmetric(horizontal: 50, vertical: 25,),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+              );
+            }
+          },
         ),
       ),
-    );
+      );
   }
 }

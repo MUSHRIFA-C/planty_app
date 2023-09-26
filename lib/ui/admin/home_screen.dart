@@ -7,6 +7,7 @@ import 'package:flutter_onboarding/ui/admin/notification.dart';
 import 'package:flutter_onboarding/ui/admin/orders_screen.dart';
 import 'package:flutter_onboarding/ui/admin/payment.dart';
 import 'package:flutter_onboarding/ui/admin/products_screen.dart';
+import 'package:flutter_onboarding/ui/admin/viewUser.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({Key? key}) : super(key: key);
@@ -105,7 +106,7 @@ class _HomescreenState extends State<Homescreen> {
                     'View User',
                     'assets/images/user.png',
                         () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => OrdersScreen()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => Viewuser()));
 
                     },
                   ),
