@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/constants.dart';
-import 'package:flutter_onboarding/models/plants.dart';
+import 'package:flutter_onboarding/models/product.dart';
 import 'package:flutter_onboarding/ui/screens/widgets/plant_widget.dart';
 
+
 class FavoritePage extends StatefulWidget {
-  final List<Plant> favoritedPlants;
-  const FavoritePage({Key? key, required this.favoritedPlants})
+
+ // final List<Product> favoritedPlants;
+
+  const FavoritePage({
+    Key? key,
+   // required this.favoritedPlants
+  })
       : super(key: key);
 
   @override
@@ -17,7 +23,7 @@ class _FavoritePageState extends State<FavoritePage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: widget.favoritedPlants.isEmpty
+     /* body: widget.favoritedPlants.isEmpty
           ? Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -49,10 +55,13 @@ class _FavoritePageState extends State<FavoritePage> {
                   scrollDirection: Axis.vertical,
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
-                    return PlantWidget(
-                        index: index, plantList: widget.favoritedPlants);
+                    *//*return PlantWidget(
+                        index: index,
+                        plantList: widget.favoritedPlants
+                    );*//*
                   }),
-            ),
+            ),*/
     );
   }
 }
+

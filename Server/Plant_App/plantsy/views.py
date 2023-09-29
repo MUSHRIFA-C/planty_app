@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from plantsy.serializers import productserializer,registererializer,loginserializer,ViewCategorySerializer
+from plantsy.serializers import productserializer,registerserializer,loginserializer,ViewCategorySerializer
 from plantsy.models import product,register,login,Categories
 from rest_framework.response import Response
 from rest_framework import status
@@ -8,7 +8,7 @@ from rest_framework.generics import GenericAPIView
 # Create your views here.
 
 class UserRegisterAPIView(GenericAPIView):
-    serializer_class = registererializer
+    serializer_class = registerserializer
     serializer_class_login = loginserializer
     def post(self, request):
 
@@ -91,11 +91,11 @@ class LoginAPIView(GenericAPIView):
 
 
 class ViewAllUserAPIView(GenericAPIView):
-    serializer_class=registererializer
+    serializer_class=registerserializer
     def get(self,request):
         queryset=register.objects.all()
         if(queryset.count()>0):
-            serializer=registererializer(queryset,many=True)
+            serializer=registerserializer(queryset,many=True)
             return Response({'data':serializer.data,'message':'all user ','success':True},status=status.HTTP_200_OK)
         else:
             return Response({'data':'No data available','success':False},status=status.HTTP_400_BAD_REQUEST)
@@ -138,31 +138,6 @@ class ViewCategoryAPIView(GenericAPIView):
         else:
             return Response({'data':'No data available','success':False},status=status.HTTP_400_BAD_REQUEST)
         
-# # class ViewPlantSingleCategoryAPIView(GenericAPIView):
-#     serializer_class=ViewPlantSerializer
-#     def get(self,request,id):
-#         queryset=Categories.objects.all().filter(pk=id).values()
-#         for i in queryset:
-#             c_id=i['id']
-#             print(c_id)
-#         data = PetData.objects.filter(categoryId=c_id).values()
-#         serializer_data=list(data)
-#         print(serializer_data)
-#         for obj in serializer_data:
-#             obj['image']=settings.MEDIA_URL + str(obj['image'])
-            
-#         return Response({'data':serializer_data,'message':'Single Category data','success':True},status=status.HTTP_200_OK)
-# 
-
-# class ViewAllCategoryItemAPIView(GenericAPIView):
-#     serializer_class=ViewPlantSerializer
-#     def get(self,request):
-#         queryset=PetData.objects.all()
-#         if(queryset.count()>0):
-#             serializer=ViewPlantSerializer(queryset,many=True)
-#             return Response({'data':serializer.data,'message':'all Categories Items','success':True},status=status.HTTP_200_OK)
-#         else:
-#             return Response({'data':'No data available','success':False},status=status.HTTP_400_BAD_REQUEST)
 
 
         #view all product
@@ -213,25 +188,28 @@ class Update_productAPIView(GenericAPIView):
         else:
              return Response({'data':'Something went wrong','success':False},status=status.HTTP_400_BAD_REQUEST)
 
+        # user profile view,update
 
-class viewuserProfile(GenericAPIView):
+class ProfileViewAPIView(GenericAPIView):
     def get(self,request,id):
         queryset=register.objects.get(pk=id)
-        serializer=registererializer(queryset)
+        serializer=registerserializer(queryset)
         return Response({'data':serializer.data,'message':'Single user data','success':True},status=status.HTTP_200_OK)
-    
-class updateuserProfile(GenericAPIView):
-    serializer_class = registererializer
+
+
+class SingleUserUpdateProfileSerializerAPIView(GenericAPIView):
+    serializer_class = registerserializer
     def put(self,request,id):
         queryset=register.objects.get(pk=id)
         print(queryset)
-        serializer=registererializer(instance=queryset,data=request.data,partial=True)
+        serializer=registerserializer(instance=queryset,data=request.data,partial=True)
         print(serializer)
         if serializer.is_valid():
             serializer.save()
             return Response({'data':serializer.data,'message':'Update data Successfully','success':True},status=status.HTTP_200_OK)
         else:
-            return Response({'data':'Something went wrong','success':False},status=status.HTTP_400_BAD_REQUEST)        
+            return Response({'data':'Something went wrong','success':False},status=status.HTTP_400_BAD_REQUEST)
+    
 
 
 

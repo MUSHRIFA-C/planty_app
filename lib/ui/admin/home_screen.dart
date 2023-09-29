@@ -8,6 +8,7 @@ import 'package:flutter_onboarding/ui/admin/orders_screen.dart';
 import 'package:flutter_onboarding/ui/admin/payment.dart';
 import 'package:flutter_onboarding/ui/admin/products_screen.dart';
 import 'package:flutter_onboarding/ui/admin/viewUser.dart';
+import 'package:flutter_onboarding/ui/screens/signin_page.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({Key? key}) : super(key: key);
@@ -38,47 +39,53 @@ class _HomescreenState extends State<Homescreen> {
           physics: ScrollPhysics(),
           child: Column(
             children: [
-              Container(
-                padding: const EdgeInsets.only(top: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                      ),
-                      width: size.width * .9,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.search,
-                            color: Colors.black54.withOpacity(.6),
-                          ),
-                          const Expanded(
-                            child: TextField(
-                              showCursor: false,
-                              decoration: InputDecoration(
-                                hintText: 'Search',
-                                border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                    ),
+                    width: size.width * .75,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.search,
+                          color: Colors.black54.withOpacity(.6),
+                        ),
+                        const Expanded(
+                          child: TextField(
+                            showCursor: false,
+                            decoration: InputDecoration(
+                              hintText: 'Search',
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
                             ),
                           ),
-                          Icon(
-                            Icons.mic,
-                            color: Colors.black54.withOpacity(.6),
-                          ),
-                        ],
-                      ),
-                      decoration: BoxDecoration(
-                        color: Constants.primaryColor.withOpacity(.1),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    )
-                  ],
-                ),
+                        ),
+                        Icon(
+                          Icons.mic,
+                          color: Colors.black54.withOpacity(.6),
+                        ),
+                      ],
+                    ),
+                    decoration: BoxDecoration(
+                      color: Constants.primaryColor.withOpacity(.1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                    IconButton(onPressed: () {
+
+                      Navigator.push(
+                          context, MaterialPageRoute(
+                          builder: (context) => SignIn()));
+
+
+                      
+                    }, icon: Icon(Icons.logout_outlined))
+                ],
               ),
               GridView.count(
                 shrinkWrap: true,

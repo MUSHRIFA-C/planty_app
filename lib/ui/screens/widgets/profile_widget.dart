@@ -10,7 +10,11 @@ class ProWidget extends StatelessWidget {
   final TextEditingController? controller;
 
 
-  ProWidget({required this.icon, required this.title,required this.fullname, required this.email, required this.controller});
+  ProWidget({required this.icon,
+    required this.title,
+    required this.fullname,
+    required this.email,
+    required this.controller});
 
   @override
   Widget build(BuildContext context) {

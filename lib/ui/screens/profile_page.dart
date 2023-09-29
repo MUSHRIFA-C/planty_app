@@ -1,11 +1,15 @@
+
+import 'dart:convert';
+import 'package:flutter_onboarding/ui/screens/home_page.dart';
+import 'package:http/http.dart'as http;
 import 'package:flutter/material.dart';
+import 'package:flutter_onboarding/const/api_constants.dart';
 import 'package:flutter_onboarding/constants.dart';
 import 'package:flutter_onboarding/models/user.dart';
 import 'package:flutter_onboarding/services/updateProfile.dart';
 import 'package:flutter_onboarding/services/viewProfile.dart';
-import 'package:flutter_onboarding/ui/screens/home_page.dart';
-import 'package:flutter_onboarding/ui/screens/signin_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
@@ -18,49 +22,34 @@ class _ProfilePageState extends State<ProfilePage> {
   late SharedPreferences prefs;
   late int outid;
   User? userDetails;
-
   TextEditingController fullnameController=TextEditingController();
   TextEditingController emailController=TextEditingController();
-  TextEditingController phonenumberController=TextEditingController();
-
+  TextEditingController contactController=TextEditingController();
   String name='';
   String email='';
-  String phone_number='';
+  String contact='';
 
   UpdateProfile updateUserProfile = UpdateProfile();
 
-  void getoutId()async {
+
+  Future<void> _viewPro() async {
     prefs = await SharedPreferences.getInstance();
-    outid = (prefs.getInt('user_id') ?? 0 ) ;
+    outid = (prefs.getInt('login_id') ?? 0 ) ;
+    final urls = APIConstants.url + APIConstants.viewProfile + outid.toString();
+    var response = await http.get(Uri.parse(urls));
+    var body = json.decode(response.body);
+    print(body);
+    setState(() {
+      name = body['data']['fullname'];
+      email = body['data']['email'];
+      contact = body['data']['phonenumber'];
 
-    print('Outsider id ${outid}');
 
-    fetchUserDetails(outid);
-  }
+      fullnameController.text = name;
+      emailController.text= email;
+      contactController.text= contact;
 
-
-  Future<User?> fetchUserDetails(int uId) async {
-    try {
-      final details = await ViewProfileAPI().getViewProfile(uId);
-      userDetails=details;
-      setState(() {
-        name =  userDetails!.fullname!;
-        email = userDetails!.email!;
-        phone_number = userDetails!.phonenumber!;
-
-        print(name);
-
-        fullnameController.text = name!;
-        emailController.text= email!;
-        phonenumberController.text= phone_number!;
-
-      });
-    }
-    catch(e){
-      // Handle errors here, e.g., show an error message
-      print('Failed to fetch user details: $e');
-      return null; // Return null in case of an error
-    }
+    });
   }
 
 
@@ -68,178 +57,205 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    getoutId();
+    // Fetch the user details when the widget initializes
+    _viewPro();
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Constants.primaryColor,
-        elevation: 1,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => HomePage()));
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.logout,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => SignIn()));
-            },
-          ),
-        ],
-      ),
+      /*appBar: AppBar(
+        leading: IconButton(icon: Icon(Icons.arrow_back),
+        onPressed: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage())),),
+      ),*/
       body: Container(
-        padding: EdgeInsets.only(left: 16, top: 25, right: 16),
-        child: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: ListView(
-            children: [
-              /*Text(
-                "Edit Profile",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-              ),*/
-              SizedBox(
-                height: 15,
-              ),
-              Center(
-                child: Stack(
-                  children: [
-                    Container(
-                      width: 130,
-                      height: 130,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              width: 4,
-                              color: Theme.of(context).scaffoldBackgroundColor),
-                          boxShadow: [
-                            BoxShadow(
-                                spreadRadius: 2,
-                                blurRadius: 10,
-                                color: Colors.black.withOpacity(0.1),
-                                offset: Offset(0, 10))
-                          ],
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(
-                                "https://images.pexels.com/3307758/pexels-photo-3307758.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=250",
-                              ))),
-                    ),
-                    Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              width: 4,
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                            ),
-                            color: Colors.green,
-                          ),
-                          child: Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                          ),
-                        )),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 35,
-              ),
-              buildTextField("Full Name",fullnameController.text, false),
-              buildTextField("E-mail",emailController.text, false),
-              buildTextField("Contact",phonenumberController.text, false),
-              SizedBox(
-                height: 35,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        width: double.infinity,
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+            color: Constants.primaryColor
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            //SizedBox(height: 80,),
+            Container(
+              margin: EdgeInsets.only(top: 45,left: 8),
+              child: Row(
                 children: [
-                  OutlinedButton(
+                  IconButton(
                     onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
                     },
-                    child: Text("CANCEL",style: TextStyle(
-                        fontSize: 15,
-                        letterSpacing: 2,
-                        color: Colors.black
-                    )),
-                    style: OutlinedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(horizontal: 50),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
-                    ),
+                    icon: Icon(Icons.arrow_back,size: 28,color: Colors.white,),
                   ),
-
-                  ElevatedButton(
-                    onPressed: (){
-                      updateUserProfile.updateProfile(context,
-                          fullnameController.text,
-                          phonenumberController.text,
-                          emailController.text);
-                    },
-                    child: Text("SUBMIT",style: TextStyle(fontSize: 15, letterSpacing: 2, color: Colors.white),),
-                    style: ElevatedButton.styleFrom(
-                        primary: Constants.primaryColor,
-                        padding: EdgeInsets.symmetric(horizontal: 50),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
-                    ),
+                  SizedBox(width: 10,),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Text('Edit Profile',style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 21,
+                        color: Colors.white
+                    ),),
                   )
                 ],
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildTextField(
-      String labelText, String placeholder, bool isPasswordTextField) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 35.0),
-      child: TextField(
-
-        decoration: InputDecoration(
-            suffixIcon: isPasswordTextField
-                ? IconButton(
-              onPressed: () {
-                setState(() {
-
-                });
-              },
-              icon: Icon(
-                Icons.remove_red_eye,
-                color: Colors.grey,
               ),
-            )
-                : null,
-            contentPadding: EdgeInsets.only(bottom: 3),
-            labelText: labelText,
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            hintText: placeholder,
-            hintStyle: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            )),
+            ),
+            name != null ?  Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: CircleAvatar(
+                  radius: 43,
+                  backgroundColor: Colors.white,
+                  child: CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Colors.teal.shade800,
+                    child: Text(name[0],style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 41,
+                        color: Colors.white
+                    ),),
+                  ),
+                )
+            ) : Center(child: CircularProgressIndicator(),),
+            SizedBox(height: 16,),
+            _viewPro != null ? Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(60),topRight: Radius.circular(60))
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 70,),
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow:[
+                                BoxShadow(
+                                    color: Colors.teal.shade800,
+                                    blurRadius: 16,
+                                    offset: Offset(2, 7)
+                                )]
+                          ),
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                    border: Border(bottom: BorderSide(color: Colors.grey.shade200))
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Name',style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.grey.shade700
+                                    ),),
+                                    TextField(
+                                      controller: fullnameController,
+                                      decoration: InputDecoration(
+                                        hintText: "${name}",
+                                        hintStyle: TextStyle(color: Colors.grey),
+                                        border: InputBorder.none,
+
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                    border: Border(bottom: BorderSide(color: Colors.grey.shade200))
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Phone Number',style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.grey.shade700
+                                    ),),
+                                    TextField(
+                                      controller: contactController,
+                                      decoration: InputDecoration(
+                                          hintText: "${contact}",
+                                          hintStyle: TextStyle(color: Colors.grey),
+                                          border: InputBorder.none
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                    border: Border(bottom: BorderSide(color: Colors.grey.shade200))
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Email',style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.grey.shade700
+                                    ),),
+                                    TextField(
+                                      controller: emailController,
+                                      decoration: InputDecoration(
+                                          hintText: "${email}",
+                                          hintStyle: TextStyle(color: Colors.grey),
+                                          border: InputBorder.none
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 65,),
+                        Container(
+                          height: 50,
+                          margin: EdgeInsets.symmetric(horizontal: 100),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10,),
+                              color: Colors.teal.shade800,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey.shade400,
+                                    blurRadius: 2,
+                                    offset: Offset(4,4),
+                                    spreadRadius: 1
+                                )]
+                          ),
+                          child: Center(
+                            child: TextButton(
+                              child: Text('Edit Profile',
+                                style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+                              onPressed: (){
+                                //Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+                                updateUserProfile.updateProfile(context,
+                                    fullnameController.text,
+                                    contactController.text,
+                                    emailController.text);
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ) : Center(child: CircularProgressIndicator(),),
+          ],
+        ),
       ),
     );
   }

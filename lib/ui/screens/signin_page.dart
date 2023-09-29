@@ -92,13 +92,6 @@ class _SignInState extends State<SignIn> {
                   );
 
                   await Api().login(context, user);
-
-
-                 /* Navigator.pushReplacement(
-                      context,
-                      PageTransition(
-                          child: const RootPage(),
-                          type: PageTransitionType.bottomToTop));*/
                 },
                 child: Container(
                   width: size.width,

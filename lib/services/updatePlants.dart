@@ -15,7 +15,6 @@ class ProductUpdateService {
       String price,
       String size,
       String description,
-      /*String rating,*/
       String humidity,
       String temperature,
       String category,

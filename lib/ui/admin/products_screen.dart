@@ -69,9 +69,9 @@ class _ProductviewState extends State<Productview> {
                             leading: CircleAvatar(
                               radius: 50.0,
                               backgroundColor: Constants.primaryColor,
-                              backgroundImage: NetworkImage(
+                              backgroundImage: AssetImage("Server/Plant_App${snapshot.data!.detaildata![index].image!}")/* NetworkImage(
                                 APIConstants.url + snapshot.data!.detaildata![index].image!,
-                              ),
+                              )*/,
                             ),
                             title: Text(
                               snapshot.data!.detaildata![index].name!,

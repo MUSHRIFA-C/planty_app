@@ -1,31 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/constants.dart';
-import 'package:flutter_onboarding/models/plants.dart';
-import 'package:flutter_onboarding/ui/screens/detail_page.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:flutter_onboarding/models/product.dart';
 
 
-class PlantWidget extends StatelessWidget {
+class PlantWidget extends StatefulWidget {
+  final int index;
+  final List<DetailData> plantList;
+
   const PlantWidget({
-    Key? key, required this.index, required this.plantList,
+    Key? key,
+    required this.index,
+    required this.plantList,
   }) : super(key: key);
 
-  final int index;
-  final List<Plant> plantList;
+  @override
+  _PlantWidgetState createState() => _PlantWidgetState();
+}
 
+class _PlantWidgetState extends State<PlantWidget> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context,
-            PageTransition(
-                child: DetailPage(
-                  plantId: plantList[index].plantId,
-                ),
-                type: PageTransitionType.bottomToTop));
+        /*Navigator.push(
+          context,
+          PageTransition(
+            child: DetailPage(
+              plantId: widget.plantList[widget.index].id,
+            ),
+            type: PageTransitionType.bottomToTop,
+          ),
+        );*/
       },
       child: Container(
         decoration: BoxDecoration(
@@ -57,8 +64,12 @@ class PlantWidget extends StatelessWidget {
                   right: 0,
                   child: SizedBox(
                     height: 80.0,
-                    child:
-                    Image.asset(plantList[index].imageURL),
+                    child: Image(
+                      image: AssetImage("Server/Plant_App${widget.plantList[widget.index].image}"),
+                    /*Image.network(
+                      widget.plantList[widget.index].image ?? '',*/
+                      fit: BoxFit.cover, // Adjust the BoxFit as needed
+                    ),
                   ),
                 ),
                 Positioned(
@@ -67,9 +78,8 @@ class PlantWidget extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(plantList[index].category),
                       Text(
-                        plantList[index].plantName,
+                        widget.plantList[widget.index].name ?? '',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
@@ -84,7 +94,7 @@ class PlantWidget extends StatelessWidget {
             Container(
               padding: const EdgeInsets.only(right: 10),
               child: Text(
-                r'₹' + plantList[index].price.toString(),
+                r'₹' + (widget.plantList[widget.index].price ?? 0).toString(),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18.0,

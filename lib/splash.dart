@@ -2,7 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/ui/admin/home_screen.dart';
 import 'package:flutter_onboarding/ui/onboarding_screen.dart';
+import 'package:flutter_onboarding/ui/root_page.dart';
 import 'package:flutter_onboarding/ui/screens/home_page.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -25,8 +27,9 @@ class _SplashScreenState extends State<SplashScreen> {
     role = (localStorage.getString("role") ?? '');
 
     if (role == user) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+      Navigator.pushReplacement(
+          context, PageTransition(child: const RootPage(),
+              type: PageTransitionType.bottomToTop));
     } else if(role == admin){
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (_) => Homescreen()));

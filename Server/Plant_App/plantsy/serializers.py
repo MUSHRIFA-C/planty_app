@@ -10,7 +10,7 @@ class productserializer(serializers.ModelSerializer):
         return product.objects.create(**validated_data)
 
 
-class registererializer(serializers.ModelSerializer):
+class registerserializer(serializers.ModelSerializer):
     class Meta:
         model = register
         fields = '__all__'
@@ -32,9 +32,3 @@ class ViewCategorySerializer(serializers.ModelSerializer):
         def create(self,validated_data):
             return Categories.objects.create(**validated_data)
 
-# class ViewPlantSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model=PetData
-#         fields='__all__'
-#         def create(self,validated_data):
-#             return PetData.objects.create(**validated_data)

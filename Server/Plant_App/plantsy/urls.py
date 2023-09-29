@@ -12,10 +12,10 @@ urlpatterns = [
      path('ViewAllUserAPIView',views.ViewAllUserAPIView.as_view(), name='ViewAllUserAPIView'),
 
      path("ViewCategoryAPIView",views.ViewCategoryAPIView.as_view(),name='ViewCategoryAPIView'),
-     # path("ViewPlantSingleCategoryAPIView/<int:id>",views.ViewPlantSingleCategoryAPIView.as_view(),name='ViewPlantSingleCategoryAPIView'),
+     
 
-     path("viewuserProfile/<int:id>",views.viewuserProfile.as_view(),name="viewuserProfile"),
-     path("updateuserProfile/<int:id>",views.updateuserProfile.as_view(),name="updateuserProfile"),
+      path("viewuserProfile/<int:id>",views.ProfileViewAPIView.as_view(),name="viewuserProfile"),
+    path("updateuserProfile/<int:id>",views.SingleUserUpdateProfileSerializerAPIView.as_view(),name="updateuserProfile"),
 
      
 

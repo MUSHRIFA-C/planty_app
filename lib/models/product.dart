@@ -3,7 +3,10 @@ class Product {
   String? message;
   bool? success;
 
-  Product({this.detaildata, this.message, this.success});
+  Product({
+    this.detaildata,
+    this.message,
+    this.success});
 
   Product.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
@@ -15,6 +18,8 @@ class Product {
     message = json['message'];
     success = json['success'];
   }
+
+  get id => null;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -35,7 +40,7 @@ class DetailData {
   String? size;
   String? humidity;
   String? temparature;
-  Null? rating;
+  String? rating;
   String? image;
   String? category;
 
@@ -78,4 +83,8 @@ class DetailData {
     data['category'] = this.category;
     return data;
   }
+
+
+
+
 }

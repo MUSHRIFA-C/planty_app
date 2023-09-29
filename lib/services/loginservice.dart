@@ -2,12 +2,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/models/login.dart';
 import 'package:flutter_onboarding/ui/admin/home_screen.dart';
+import 'package:flutter_onboarding/ui/root_page.dart';
 import 'package:flutter_onboarding/ui/screens/home_page.dart';
 import 'package:flutter_onboarding/ui/screens/signin_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_onboarding/const/api_constants.dart';
 import 'package:flutter_onboarding/models/user.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -44,9 +46,11 @@ class Api {
 
 
         if(role == user){
-          Navigator.push(
-              context, MaterialPageRoute(
-              builder: (context)=> HomePage()));
+          Navigator.pushReplacement(
+              context,
+              PageTransition(
+                  child: const RootPage(),
+                  type: PageTransitionType.bottomToTop));
         }
         else if(role == admin) {
           Navigator.push(

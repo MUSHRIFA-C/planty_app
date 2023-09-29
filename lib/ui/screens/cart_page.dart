@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/constants.dart';
 import 'package:flutter_onboarding/models/plants.dart';
+import 'package:flutter_onboarding/models/product.dart';
 import 'package:flutter_onboarding/ui/screens/widgets/plant_widget.dart';
 
 class CounterWidget extends StatefulWidget {
@@ -78,9 +79,11 @@ class _CounterWidgetState extends State<CounterWidget> {
 }
 
 class CartPage extends StatefulWidget {
-  final List<Plant> addedToCartPlants;
+  //final List<Product> addedToCartPlants;
 
-  const CartPage({Key? key, required this.addedToCartPlants}) : super(key: key);
+  const CartPage({Key? key,
+    //required this.addedToCartPlants
+  }) : super(key: key);
 
   @override
   State<CartPage> createState() => _CartPageState();
@@ -91,8 +94,8 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: widget.addedToCartPlants.isEmpty
-          ? Center(
+      body:// widget.addedToCartPlants.isEmpty ?
+      /*Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -115,21 +118,26 @@ class _CartPageState extends State<CartPage> {
           ],
         ),
       )
-          : Container(
+     :*/
+        Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 30),
         height: size.height,
         child: Column(
           children: [
             Expanded(
               child: ListView.builder(
-                itemCount: widget.addedToCartPlants.length,
+                //itemCount: widget.addedToCartPlants.length,
                 scrollDirection: Axis.vertical,
                 physics: const BouncingScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
-                  return PlantWidget(
+                  return ListTile(
+
+                  );/* PlantWidget(
+                    plantList: [],
                     index: index,
-                    plantList: widget.addedToCartPlants,
-                  );
+                   *//* index: index,
+                    plantList: widget.addedToCartPlants,*//*
+                  );*/
                 },
               ),
             ),

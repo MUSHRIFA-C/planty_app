@@ -1,4 +1,4 @@
-class Plant {
+/*class Plant {
   final int plantId;
   final int price;
   final String size;
@@ -178,4 +178,9 @@ class Plant {
     List<Plant> _selectedPlants = Plant.plantList;
     return _selectedPlants.where((element) => element.isSelected == true).toList();
   }
-}
+  }/*
+
+
+
+ */
+ */

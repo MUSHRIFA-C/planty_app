@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/constants.dart';
-import 'package:flutter_onboarding/models/plants.dart';
+import 'package:flutter_onboarding/models/product.dart';
+import 'package:flutter_onboarding/services/viewUserPlant.dart';
 import 'package:flutter_onboarding/ui/screens/detail_page.dart';
 import 'package:flutter_onboarding/ui/screens/widgets/plant_widget.dart';
 import 'package:page_transition/page_transition.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,11 +16,30 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  void initState() {
+    super.initState();
+    _loadPlantData(); // Load plant data when the page initializes
+  }
+
+  List<DetailData> _plantList =[];
+
+
+  Future<void> _loadPlantData() async {
+    try {
+      final plantData = await ViewUserplant.getPlants();
+      setState(() {
+        _plantList = plantData.detaildata ?? [];
+      });
+    } catch (e) {
+      print('Error loading plant data: $e');
+    }
+  }
+
+late int plantid;
+
   Widget build(BuildContext context) {
     int selectedIndex = 0;
     Size size = MediaQuery.of(context).size;
-
-    List<Plant> _plantList = Plant.plantList;
 
     //Plants category
     List<String> _plantTypes = [
@@ -88,6 +109,7 @@ class _HomePageState extends State<HomePage> {
                     scrollDirection: Axis.horizontal,
                     itemCount: _plantTypes.length,
                     itemBuilder: (BuildContext context, int index) {
+
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: GestureDetector(
@@ -100,11 +122,11 @@ class _HomePageState extends State<HomePage> {
                             _plantTypes[index],
                             style: TextStyle(
                               fontSize: 16.0,
-                              fontWeight: selectedIndex == index
-                                  ? FontWeight.bold
+                              fontWeight: selectedIndex == index ?
+                              FontWeight.bold
                                   : FontWeight.w300,
-                              color: selectedIndex == index
-                                  ? Constants.primaryColor
+                              color: selectedIndex == index ?
+                              Constants.primaryColor
                                   : Constants.blackColor,
                             ),
                           ),
@@ -118,13 +140,14 @@ class _HomePageState extends State<HomePage> {
                     itemCount: _plantList.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index) {
+                      plantid=_plantList[index].id!;
                       return GestureDetector(
                         onTap: () {
                           Navigator.push(
                               context,
                               PageTransition(
                                   child: DetailPage(
-                                    plantId: _plantList[index].plantId,
+                                    plantId:plantid,
                                   ),
                                   type: PageTransitionType.bottomToTop));
                         },
@@ -142,15 +165,16 @@ class _HomePageState extends State<HomePage> {
                                   child: IconButton(
                                     onPressed: () {
                                       setState(() {
-                                        bool isFavorited = toggleIsFavorated(
+                                       /* bool isFavorited = toggleIsFavorated(
                                             _plantList[index].isFavorated);
-                                        _plantList[index].isFavorated = isFavorited;
-                                      });
+                                        _plantList[index].isFavorated = isFavorited;*/
+                                      }
+                                      );
                                     },
                                     icon: Icon(
-                                      _plantList[index].isFavorated == true
-                                          ? Icons.favorite
-                                          : Icons.favorite_border,
+                                      //_plantList[index].isFavorated == true ?
+                                     // Icons.favorite:
+                                      Icons.favorite_border,
                                       color: Constants.primaryColor,
                                     ),
                                     iconSize: 30,
@@ -161,12 +185,15 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
-                              Positioned(
+                             Positioned(
                                 left: 50,
                                 right: 50,
                                 top: 50,
                                 bottom: 50,
-                                child: Image.asset(_plantList[index].imageURL),
+                                child: Image(image: AssetImage("Server/Plant_App${_plantList[index].image}"),
+                                ),
+                               /*Image.network(_plantList[index].image?? '' ,*/
+
                               ),
                               Positioned(
                                 bottom: 15,
@@ -175,14 +202,14 @@ class _HomePageState extends State<HomePage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      _plantList[index].category,
+                                      _plantList[index].category ?? '',
                                       style: const TextStyle(
                                         color: Colors.white70,
                                         fontSize: 16,
                                       ),
                                     ),
                                     Text(
-                                      _plantList[index].plantName,
+                                      _plantList[index].name?? '',
                                       style: const TextStyle(
                                         color: Colors.white70,
                                         fontSize: 15,
@@ -203,7 +230,7 @@ class _HomePageState extends State<HomePage> {
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: Text(
-                                    r'$' + _plantList[index].price.toString(),
+                                    r'₹' + (_plantList[index].price ?? 0).toString(),
                                     style: TextStyle(
                                         color: Constants.primaryColor,
                                         fontSize: 16),
@@ -223,7 +250,7 @@ class _HomePageState extends State<HomePage> {
               Container(
                 padding: const EdgeInsets.only(left: 16, bottom: 20, top: 20),
                 child: const Text(
-                  'New Plants',
+                  'All Plants',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18.0,
@@ -233,21 +260,27 @@ class _HomePageState extends State<HomePage> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 height: size.height * .5,
-                child: ListView.builder(
-                    itemCount: _plantList.length,
-                    scrollDirection: Axis.vertical,
-                    physics: const BouncingScrollPhysics(),
-                    itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
-                          onTap: (){
-                            Navigator.push(context, PageTransition(
-                                child: DetailPage(plantId: _plantList[index].plantId), type: PageTransitionType.bottomToTop));
-                          },
-                          child: PlantWidget(index: index, plantList: _plantList));
-                    }),
+                child:ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: _plantList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return GestureDetector(
+                              onTap: () {
+                                setState(() {});
+                                Navigator.push(context, PageTransition(
+                                child: DetailPage(
+                                    plantId: plantid),
+                                type: PageTransitionType.bottomToTop));
+                              },
+                              child: PlantWidget(index: index,
+                                  plantList: _plantList));
+                        },
+                ),
               ),
             ],
           ),
-        ));
+        ),
+    );
   }
 }
