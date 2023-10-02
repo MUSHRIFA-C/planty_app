@@ -113,14 +113,14 @@ class _DetailPageState extends State<DetailPage> {
                     child: IconButton(
                         onPressed: () {
                           setState(() {
-                           /* bool isFavorited = toggleIsFavorated(
+                            /* bool isFavorited = toggleIsFavorated(
                                 _plantList[widget.plantId].isFavorated);
                             _plantList[widget.plantId].isFavorated =
                                 isFavorited;*/
                           });
                         },
                         icon: Icon(
-                         // _plantList[widget.plantId].isFavorated == true?
+                          // _plantList[widget.plantId].isFavorated == true?
                           // Icons.favorite:
                           Icons.favorite_border,
                           color: Constants.primaryColor,
@@ -165,7 +165,7 @@ class _DetailPageState extends State<DetailPage> {
                           PlantFeature(
                             title: 'Humidity',
                             plantFeature:
-                                '' + humidity.toString(),
+                            '' + humidity.toString(),
                           ),
                           PlantFeature(
                             title: 'Temperature',
@@ -228,7 +228,7 @@ class _DetailPageState extends State<DetailPage> {
                       Row(
                         children: [
                           Text(
-                           rating==null?'0':rating!,
+                            rating==null?'0':rating!,
                             style: TextStyle(
                               fontSize: 30.0,
                               color: Constants.primaryColor,
@@ -279,11 +279,11 @@ class _DetailPageState extends State<DetailPage> {
                 });
               }, icon: Icon(
                 Icons.shopping_cart,
-               // color: _plantList[widget.plantId].isSelected == true ? Colors.white :
+                // color: _plantList[widget.plantId].isSelected == true ? Colors.white :
                 //Constants.primaryColor,
               )),
               decoration: BoxDecoration(
-                 /* color: _plantList[widget.plantId].isSelected == true ?
+                /* color: _plantList[widget.plantId].isSelected == true ?
                   Constants.primaryColor.withOpacity(.5) : Colors.white,*/
                   borderRadius: BorderRadius.circular(50),
                   boxShadow: [
@@ -359,4 +359,3 @@ class PlantFeature extends StatelessWidget {
     );
   }
 }
-

@@ -45,3 +45,15 @@ class register(models.Model):
     def __str__(self):
         return self.fullname
 
+
+class Cart(models.Model):
+    item=models.ForeignKey(product,on_delete=models.CASCADE)
+    user=models.ForeignKey(register,on_delete=models.CASCADE)
+    itemname=models.CharField(max_length=500)
+    image = models.ImageField(upload_to='images')
+    quantity = models.CharField(max_length=500)
+    total_price=models.CharField(max_length=500)
+    category = models.CharField(max_length=10)
+    cart_status=models.CharField(max_length=10)
+
+

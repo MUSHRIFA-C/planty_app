@@ -48,7 +48,7 @@ class UpdateProfile{
       }
     }
     catch (e) {
-     /* throw e.toString();*/
+      /* throw e.toString();*/
     }
     throw 'Unexpected error occurred';
   }

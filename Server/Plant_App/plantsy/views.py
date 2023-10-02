@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from plantsy.serializers import productserializer,registerserializer,loginserializer,ViewCategorySerializer
-from plantsy.models import product,register,login,Categories
+from plantsy.serializers import productserializer,registerserializer,loginserializer,ViewCategorySerializer,AddtoCartSerializer
+from plantsy.models import product,register,login,Categories,Cart
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
@@ -45,7 +45,6 @@ class UserRegisterAPIView(GenericAPIView):
             return Response({'data': serializer.data, 'message': 'Registration Succesful', 'success':True},status = status.HTTP_201_CREATED)
         return Response({'data': serializer.errors, 'message': 'Registration Failed', 'success': False},status = status.HTTP_400_BAD_REQUEST)
         
-
 
 class LoginAPIView(GenericAPIView):
     serializer_class = loginserializer
@@ -99,7 +98,6 @@ class ViewAllUserAPIView(GenericAPIView):
             return Response({'data':serializer.data,'message':'all user ','success':True},status=status.HTTP_200_OK)
         else:
             return Response({'data':'No data available','success':False},status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class AddProductAPIView(GenericAPIView):
@@ -209,8 +207,133 @@ class SingleUserUpdateProfileSerializerAPIView(GenericAPIView):
             return Response({'data':serializer.data,'message':'Update data Successfully','success':True},status=status.HTTP_200_OK)
         else:
             return Response({'data':'Something went wrong','success':False},status=status.HTTP_400_BAD_REQUEST)
-    
 
+      #cart add,dlt,view,increm,decrem
+
+class AddtoCartAPIView(GenericAPIView):
+    serializer_class=AddtoCartSerializer
+    def post(self, request):
+        total_price=""
+        image=""
+        category=""
+        prices=""
+        
+        user = request.data.get('user')
+        item=request.data.get('item')
+        print(item)
+        quty = request.data.get('quantity')
+        quantity=int(quty)
+        cart_status="0"
+        
+        carts = Cart.objects.filter(user=user, item=item)
+        if carts.exists():
+            return Response({'message':'Item is already in cart','success':False}, status=status.HTTP_400_BAD_REQUEST)
+
+        else:
+            data=product.objects.all().filter(id=item).values()
+            for i in data:
+                print(i)
+                prices=i['price']
+                # p_status=i['petstatus']
+                ctgry=i['category']
+                name=i['name']
+                print(ctgry)
+                price=int(prices)
+                print(price)
+                total_price=price*quantity
+                print(total_price)
+                tp=str(total_price)
+
+            producto = product.objects.get(id=item)
+            product_image = producto.image
+            print(image)
+                
+
+            serializer = self.serializer_class(data= {'user':user,'item':item,'quantity':quantity,'total_price':tp,'cart_status':cart_status,'category':ctgry,'image':product_image,'itemname':name})
+            print(serializer)
+            if serializer.is_valid():
+                print("hi")
+                serializer.save()
+                return Response({'data':serializer.data,'message':'Item added to cartsuccessfully', 'success':True}, status = status.HTTP_201_CREATED)
+            return Response({'data':serializer.errors,'message':'Invalid','success':False}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SingleCartAPIView(GenericAPIView):
+    def get(self, request, id):
+
+        u_id=""
+        qset =register.objects.all().filter(pk=id).values()
+        for i in qset:
+            u_id=i['id']
+
+
+        data = Cart.objects.filter(user=u_id).values()
+        serialized_data=list(data)
+        print(serialized_data)
+        for obj in serialized_data:
+            obj['image'] =settings.MEDIA_URL+str(obj['image'])   
+        return Response({'data' : serialized_data, 'message':'single product data','success':True},status=status.HTTP_200_OK) 
+    
+class CartIncrementQuantityAPIView(GenericAPIView):
+    def put(self, request, id):
+        cart_item = Cart.objects.get(pk=id)
+
+        qnty=cart_item.quantity
+        qty=int(qnty)
+
+        cart_item.quantity=qty + 1
+
+        q=cart_item.quantity
+        qn=int(q)
+
+        pr=cart_item.item.price
+        price=int(pr)
+
+        tp=price*qn
+        cart_item.total_price=tp
+
+        cart_item.save()
+        serialized_data = AddtoCartSerializer(cart_item,context={'request':request}).data
+        # serialized_data['image']=str(serialized_data['image']).split('http://localhost:8000')[1]
+        base_url=request.build_absolute_uri('/')[:-1]
+        serialized_data['image']=str(serialized_data['image']).replace(base_url,'')
+        return Response({'data' : serialized_data, 'message':'cart item quantity updated','success':True},status=status.HTTP_200_OK)
+
+class CartDecrementQuantityAPIView(GenericAPIView):
+    def put(self, request, id):
+        cart_item = Cart.objects.get(pk=id)
+
+        qny=cart_item.quantity
+        qant=int(qny)
+        
+        if qant > 1:
+            qnty=cart_item.quantity
+            qty=int(qnty)
+            cart_item.quantity=qty - 1
+
+            q=cart_item.quantity
+            qn=int(q)
+
+            pr=cart_item.item.price
+            price=int(pr)
+
+            tp=price*qn
+            cart_item.total_price=tp
+
+            cart_item.save()
+            serialized_data = AddtoCartSerializer(cart_item,context={'request':request}).data
+            base_url=request.build_absolute_uri('/')[:-1]
+            serialized_data['image']=str(serialized_data['image']).replace(base_url,'')
+
+            return Response({'data' : serialized_data, 'message':'cart item quantity updated','success':True},status=status.HTTP_200_OK)
+        else:
+            return Response({'message':'Quantity cannot be less than 1','success':False},status=status.HTTP_400_BAD_REQUEST)
+
+class Delete_CartAPIView(GenericAPIView):
+    def delete(self, request, id):
+        delmember = Cart.objects.get(pk=id)
+        delmember.delete()
+        return Response({'message':'Cart Item deleted successfully','success':True}, status = status.HTTP_200_OK)
 
 
 

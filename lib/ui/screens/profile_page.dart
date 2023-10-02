@@ -7,7 +7,6 @@ import 'package:flutter_onboarding/const/api_constants.dart';
 import 'package:flutter_onboarding/constants.dart';
 import 'package:flutter_onboarding/models/user.dart';
 import 'package:flutter_onboarding/services/updateProfile.dart';
-import 'package:flutter_onboarding/services/viewProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -64,10 +63,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*appBar: AppBar(
-        leading: IconButton(icon: Icon(Icons.arrow_back),
-        onPressed: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage())),),
-      ),*/
       body: Container(
         width: double.infinity,
         height: MediaQuery.of(context).size.height,
