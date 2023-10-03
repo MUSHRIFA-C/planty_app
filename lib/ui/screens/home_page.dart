@@ -146,9 +146,7 @@ late int plantid;
                           Navigator.push(
                               context,
                               PageTransition(
-                                  child: DetailPage(
-                                    plantId:plantid,
-                                  ),
+                                  child: DetailPage(plantId:plantid,),
                                   type: PageTransitionType.bottomToTop));
                         },
                         child: Container(

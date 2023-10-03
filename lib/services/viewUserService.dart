@@ -7,7 +7,7 @@ class ViewUserService {
   static Future<List<User>> getUsers() async {
     try {
 
-      final url = APIConstants.url + APIConstants.viewproduct;
+      final url = APIConstants.url + APIConstants.viewuser;
       print('url$url');
       var response = await http.get(Uri.parse(url));
 

@@ -8,6 +8,7 @@ class APIConstants{
   static const viewproduct = "/api/Get_All_productAPIView";
   static const updateproduct = "/api/Update_productAPIView";
   static const viewsingleproduct = "/api/Get_single_productAPIView/";
+  static const deleteproduct= "/api/Delete_productAPIView";
 
   static const viewProfile='/api/viewuserProfile/';
   static const updateProfile='/api/updateuserProfile/';

@@ -1,11 +1,11 @@
-
 import 'dart:convert';
 import 'package:http/http.dart'as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/const/api_constants.dart';
 import 'package:flutter_onboarding/constants.dart';
-import 'package:flutter_onboarding/models/plants.dart';
 import 'package:flutter_onboarding/models/product.dart';
+import 'package:flutter_onboarding/services/Categoryservice.dart';
+
 
 class DetailPage extends StatefulWidget {
   final int plantId;
@@ -37,6 +37,8 @@ class _DetailPageState extends State<DetailPage> {
   String? image;
   String? category;
 
+  ViewCategoryApi viewCategoryApi = ViewCategoryApi();
+
   Future<void> _viewPro() async {
     final urls = APIConstants.url + APIConstants.viewsingleproduct + widget.plantId.toString();
     var response = await http.get(Uri.parse(urls));
@@ -49,15 +51,13 @@ class _DetailPageState extends State<DetailPage> {
       description = body['data']['description'];
       size = body['data']['size'];
       humidity = body['data']['humidity'];
-      temparature = body['data']['temparature'];
+      temparature = body['data']['temperature'];
       category = body['data']['category'];
       rating = body['data']['rating'];
       image = body['data']['image'];
 
     });
   }
-
-
 
   @override
   void initState() {
@@ -112,6 +112,7 @@ class _DetailPageState extends State<DetailPage> {
                     ),
                     child: IconButton(
                         onPressed: () {
+
                           setState(() {
                             /* bool isFavorited = toggleIsFavorated(
                                 _plantList[widget.plantId].isFavorated);
@@ -272,23 +273,25 @@ class _DetailPageState extends State<DetailPage> {
               height: 50,
               width: 50,
               child: IconButton(onPressed: (){
-                setState(() {
-                  /*bool isSelected = toggleIsSelected(_plantList[widget.plantId].isSelected);
 
-                  _plantList[widget.plantId].isSelected = isSelected;*/
-                });
-              }, icon: Icon(
+                /*setState(() {
+                  bool isSelected = toggleIsSelected(_plantList[widget.plantId].id as bool);
+                  _plantList[widget.plantId].id = isSelected as int?;
+                }
+                );*/
+              },
+                  icon: Icon(
                 Icons.shopping_cart,
-                // color: _plantList[widget.plantId].isSelected == true ? Colors.white :
-                //Constants.primaryColor,
+                 color: _plantList[widget.plantId].id == true ?
+                 Colors.white : Constants.primaryColor,
               )),
               decoration: BoxDecoration(
-                /* color: _plantList[widget.plantId].isSelected == true ?
-                  Constants.primaryColor.withOpacity(.5) : Colors.white,*/
+                 color: _plantList[widget.plantId].id == true ?
+                  Constants.primaryColor.withOpacity(.5) : Colors.white,
                   borderRadius: BorderRadius.circular(50),
                   boxShadow: [
                     BoxShadow(
-                      offset: const Offset(0, 1),
+                      offset: Offset(0, 1),
                       blurRadius: 5,
                       color: Constants.primaryColor.withOpacity(.3),
                     ),

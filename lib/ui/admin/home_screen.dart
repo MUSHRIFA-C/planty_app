@@ -133,22 +133,22 @@ class _HomescreenState extends State<Homescreen> {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => Apayment()));
                     },
                   ),
-                  _buildFeatureCard(
+                  /*_buildFeatureCard(
                     context,
                     'Complaint',
                     'images/events.jpeg',
                         () {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => Acomplaint()));
                     },
-                  ),
-                  _buildFeatureCard(
+                  ),*/
+                  /*_buildFeatureCard(
                     context,
                     'Feedback',
                     'assets/images/feed.png',
                         () {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => FeedBack()));
                     },
-                  ),
+                  ),*/
                 ],
               ),
             ],

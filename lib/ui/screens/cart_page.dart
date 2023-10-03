@@ -309,32 +309,6 @@ class _CartPageState extends State<CartPage> {
                 )
             ),
 
-            // Container(
-            //   margin: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
-            //   padding: EdgeInsets.all(15),
-            //   decoration: BoxDecoration(
-            //     color: Colors.white,
-            //     borderRadius: BorderRadius.circular(10),
-            //     boxShadow: [
-            //       BoxShadow(
-            //         color: Colors.teal.withOpacity(0.3),
-            //         spreadRadius: 1,
-            //         blurRadius: 5
-            //       )
-            //     ]),
-            //   child: Column(
-            //     children: [
-            //       Row(
-            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //         children: [
-            //           Text(
-            //             "Sub-Total"
-            //           )
-            //         ],
-            //       )
-            //     ],
-            //   ),
-            // )
           ],
         ),
       ),

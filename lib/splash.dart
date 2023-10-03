@@ -50,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   startTime() async {
-    var duration = new Duration(seconds: 6);
+    var duration = new Duration(seconds: 4);
     return Timer(duration, checkRoleAndNavigate);
   }
 
@@ -63,7 +63,7 @@ class _SplashScreenState extends State<SplashScreen> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: Center(
-          child: Image.asset('images/logo.png',),
+          child: Image.asset('assets/images/logo.png',),
         ),
       ),
     );

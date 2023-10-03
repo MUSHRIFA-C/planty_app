@@ -1,4 +1,3 @@
-/*
 import 'dart:convert';
 import 'dart:html';
 import 'package:flutter/cupertino.dart';
@@ -62,20 +61,18 @@ class UpdatePlants{
       }
     }
     catch (e) {
-      */
-/* throw e.toString();*//*
+ throw e.toString();
 
     }
     throw 'Unexpected error occurred';
   }
 }
 
-*/
 
 
 
 
-import 'dart:convert';
+/*import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/const/api_constants.dart';
@@ -110,7 +107,7 @@ class ProductUpdateService {
     request.fields["pthumidity"] = humidity;
     request.fields["pttemp"] = temperature;
 
-/*request.fields["ptrating"] = rating;*/
+*//*request.fields["ptrating"] = rating;*//*
 
     request.fields["category"] = category;
 
@@ -149,5 +146,5 @@ class ProductUpdateService {
       );
     }
   }
-}
+}*/
 
