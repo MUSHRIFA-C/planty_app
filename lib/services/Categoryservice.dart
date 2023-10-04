@@ -34,15 +34,15 @@ class ViewCategoryApi {
     required int userId,
     required int productId
   }) async {
-    var urls = Uri.parse('${APIConstants.url + APIConstants.addtoCartItem}');
-    var datas = {
+    final Uri url = Uri.parse('${APIConstants.url}${APIConstants.addtoCartItem}');
+    final Map<String, String> data = {
 
       "user": userId.toString(),
       "item": productId.toString(),
       "quantity": "1",
     };
     try {
-      var response = await Apiservice().authData(datas,APIConstants.addtoCartItem);
+      var response = await Apiservice().authData(data,APIConstants.addtoCartItem);
       var body = json.decode(response.body);
       if (body['success'] == true) {
         ScaffoldMessenger.of(context).showSnackBar(
