@@ -34,16 +34,18 @@ class ViewCategoryApi {
     required int userId,
     required int productId
   }) async {
-    final Uri url = Uri.parse('${APIConstants.url}${APIConstants.addtoCartItem}');
-    final Map<String, String> data = {
+    var urls = Uri.parse('${APIConstants.url + APIConstants.addtoCartItem}');
+    var datas = {
 
       "user": userId.toString(),
       "item": productId.toString(),
       "quantity": "1",
     };
+    print("datas$datas");
     try {
-      var response = await Apiservice().authData(data,APIConstants.addtoCartItem);
+      var response = await Apiservice().authData(datas,APIConstants.addtoCartItem);
       var body = json.decode(response.body);
+      print("--body $body");
       if (body['success'] == true) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(body['message']),
@@ -61,6 +63,7 @@ class ViewCategoryApi {
     }
     throw 'Unexpected error occurred';
   }
+
 
   static Future<List<AddtoCart>> getSinglecartItems(int userId) async{
     final urls = APIConstants.url + APIConstants.cartItemsview + userId.toString();

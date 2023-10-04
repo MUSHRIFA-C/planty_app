@@ -53,7 +53,7 @@ class Cart(models.Model):
     image = models.ImageField(upload_to='images')
     quantity = models.CharField(max_length=500)
     total_price=models.CharField(max_length=500)
-    category = models.CharField(max_length=10)
+    category = models.CharField(max_length=100)
     cart_status=models.CharField(max_length=10)
 
 

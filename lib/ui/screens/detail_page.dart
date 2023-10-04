@@ -5,6 +5,7 @@ import 'package:flutter_onboarding/const/api_constants.dart';
 import 'package:flutter_onboarding/constants.dart';
 import 'package:flutter_onboarding/models/product.dart';
 import 'package:flutter_onboarding/services/Categoryservice.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class DetailPage extends StatefulWidget {
@@ -27,7 +28,7 @@ class _DetailPageState extends State<DetailPage> {
   bool toggleIsSelected(bool isSelected) {
     return !isSelected;
   }
-  String? name;
+  String name='';
   String? price;
   String? description;
   String? size;
@@ -36,10 +37,15 @@ class _DetailPageState extends State<DetailPage> {
   String? rating;
   String? image;
   String? category;
+  late SharedPreferences localStorage;
+  late int loginId;
 
   ViewCategoryApi viewCategoryApi = ViewCategoryApi();
 
   Future<void> _viewPro() async {
+    localStorage = await SharedPreferences.getInstance();
+    loginId = (localStorage.getInt("login_id") ?? 0);
+
     final urls = APIConstants.url + APIConstants.viewsingleproduct + widget.plantId.toString();
     var response = await http.get(Uri.parse(urls));
     var body = json.decode(response.body);
@@ -131,6 +137,7 @@ class _DetailPageState extends State<DetailPage> {
               ],
             ),
           ),
+          image==null?Center(child: CircularProgressIndicator()):
           Positioned(
             top: 100,
             left: 20,
@@ -206,7 +213,7 @@ class _DetailPageState extends State<DetailPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            name!,
+                            name,
                             style: TextStyle(
                               color: Constants.primaryColor,
                               fontWeight: FontWeight.bold,
@@ -273,6 +280,7 @@ class _DetailPageState extends State<DetailPage> {
               height: 50,
               width: 50,
               child: IconButton(onPressed: (){
+                ViewCategoryApi().addtoCart(context: context, userId: loginId, productId: widget.plantId);
 
                 /*setState(() {
                   bool isSelected = toggleIsSelected(_plantList[widget.plantId].id as bool);
@@ -281,12 +289,12 @@ class _DetailPageState extends State<DetailPage> {
                 );*/
               },
                   icon: Icon(
-                Icons.shopping_cart,
-                 color: _plantList[widget.plantId].id == true ?
-                 Colors.white : Constants.primaryColor,
-              )),
+                    Icons.shopping_cart,
+                    color: [widget.plantId] == true ?
+                    Colors.white : Constants.primaryColor,
+                  )),
               decoration: BoxDecoration(
-                 color: _plantList[widget.plantId].id == true ?
+                  color: [widget.plantId] == true ?
                   Constants.primaryColor.withOpacity(.5) : Colors.white,
                   borderRadius: BorderRadius.circular(50),
                   boxShadow: [
