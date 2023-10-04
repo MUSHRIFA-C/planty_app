@@ -8,28 +8,6 @@ import 'package:http/http.dart' as http;
 
 class ViewCategoryApi {
 
-  /*static Future<ViewCategoryItemsModel> getPetDetails(int id) async {
-    final urls = APIConstants.url + APIConstants.viewSinglePetDetails + id.toString();
-    var response = await http.get(Uri.parse(urls));
-    if (response.statusCode == 200) {
-      var body = json.decode(response.body);
-      return ViewCategoryItemsModel.fromJson(body['data']);
-    } else {
-      throw Exception('Failed to load pet details');
-    }
-  }*/
-
-  /*static Future<ViewCategoryItemsModel> getAllPetDetails() async {
-    final urls = APIConstants.url + APIConstants.viewAllPetDetails;
-    var response = await http.get(Uri.parse(urls));
-    if (response.statusCode == 200) {
-      var body = json.decode(response.body);
-      return ViewCategoryItemsModel.fromJson(body['data']);
-    } else {
-      throw Exception('Failed to load pet details');
-    }
-  }*/
-
   Future<AddtoCart> addtoCart({required BuildContext context,
     required int userId,
     required int productId
@@ -68,6 +46,7 @@ class ViewCategoryApi {
   static Future<List<AddtoCart>> getSinglecartItems(int userId) async{
     final urls = APIConstants.url + APIConstants.cartItemsview + userId.toString();
     var response = await http.get(Uri.parse(urls));
+    print(urls);
     if (response.statusCode == 200) {
       var body = json.decode(response.body);
       List<AddtoCart> data =  body['data'].map<AddtoCart>((e) => AddtoCart.fromJson(e)).toList();

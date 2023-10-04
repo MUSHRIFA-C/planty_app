@@ -1,6 +1,7 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/constants.dart';
+import 'package:flutter_onboarding/models/cart.dart';
 import 'package:flutter_onboarding/models/plants.dart';
 import 'package:flutter_onboarding/models/product.dart';
 import 'package:flutter_onboarding/ui/screens/cart_page.dart';
@@ -94,13 +95,11 @@ class _RootPageState extends State<RootPage> {
           onTap: (index){
             setState(() {
               _bottomNavIndex = index;
-              /*final List<Product> favoritedPlants = Product.getFavoritedPlants();
-              final List<Product> addedToCartPlants = Product.addedToCartPlants();*/
+              /*final List<Product> favoritedPlants = Product.getFavoritedPlants();*/
+              //final List<AddtoCart> addedToCartPlants = AddtoCart.addedToCartPlants();
               Product();
-              /* final List<Product> favoritedPlants = Product() as List<Product>;
-              final List<Product> addedToCartPlants = Product() as List<Product>;*/
-              /*favorites = favoritedPlants;
-              myCart = addedToCartPlants.toSet().toList();*/
+              //favorites = favoritedPlants;
+              //myCart = addedToCartPlants.toSet().toList();
             });
           }
       ),

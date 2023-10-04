@@ -1,9 +1,11 @@
 from django.shortcuts import render
+from django.conf import settings
 from plantsy.serializers import productserializer,registerserializer,loginserializer,ViewCategorySerializer,AddtoCartSerializer
 from plantsy.models import product,register,login,Categories,Cart
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
+
 
 # Create your views here.
 
@@ -260,12 +262,10 @@ class AddtoCartAPIView(GenericAPIView):
 
 class SingleCartAPIView(GenericAPIView):
     def get(self, request, id):
-
         u_id=""
         qset =register.objects.all().filter(pk=id).values()
         for i in qset:
             u_id=i['id']
-
 
         data = Cart.objects.filter(user=u_id).values()
         serialized_data=list(data)

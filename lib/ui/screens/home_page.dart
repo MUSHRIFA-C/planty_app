@@ -270,7 +270,7 @@ late int plantid;
                                 setState(() {});
                                 Navigator.push(context, PageTransition(
                                 child: DetailPage(
-                                    plantId: plantid),
+                                    plantId: _plantList[index].id!.toInt()),
                                 type: PageTransitionType.bottomToTop));
                               },
                               child: PlantWidget(index: index,

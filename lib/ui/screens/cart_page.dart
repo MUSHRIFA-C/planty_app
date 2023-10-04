@@ -37,11 +37,13 @@ class _CartPageState extends State<CartPage> {
 
   void getoutId() async {
     prefs = await SharedPreferences.getInstance();
-    loginId = (prefs.getInt('login_id') ?? 0);
-    outid = (prefs.getInt('user_id') ?? 0 ) ;
+    /*loginId = (prefs.getInt('login_id') ?? 0);*/
+    outid = (prefs.getInt('login_id') ?? 0 ) ;
     setState(() {
 
-    });
+    }
+    );
+    print(outid);
     //fetchTotalPrice();
   }
 
@@ -138,7 +140,7 @@ class _CartPageState extends State<CartPage> {
           children: [
             Container(
                 child: FutureBuilder<List<AddtoCart>>(
-                  //future: ViewCategoryApi.getSinglecartItems(outid),
+                  future: ViewCategoryApi.getSinglecartItems(outid),
                   builder: (BuildContext content, snapshot) {
                   if (snapshot.hasData) {
                     return ListView.builder(
@@ -147,12 +149,14 @@ class _CartPageState extends State<CartPage> {
                         itemCount: snapshot.data?.length,
                         itemBuilder: (context, index) {
                           final item = snapshot.data![index].id;
+                          print(outid);
                           count = snapshot.data!.length;
                           return Dismissible(
                             onDismissed: (DismissDirection direction) {
                               setState(() {
                                 deleteCartItem.deleteCartItems(snapshot.data![index].id!.toInt());
-                              });
+                              }
+                              );
                             },
                             direction: DismissDirection.endToStart,
                             key:UniqueKey(),
@@ -179,7 +183,8 @@ class _CartPageState extends State<CartPage> {
                                       InkWell(
                                         onTap: (){
                                           int? pid=snapshot.data![index].item?.toInt();
-                                          Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailPage(plantId: snapshot.data![index].item!.toInt())));
+                                          Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailPage(
+                                              plantId: snapshot.data![index].item!.toInt())));
                                         },
                                         child: SizedBox(
                                           width: 120,
@@ -222,7 +227,7 @@ class _CartPageState extends State<CartPage> {
                                           ),
                                           Text.rich(TextSpan(
                                               text:
-                                              "r'₹'${snapshot.data?[index].totalPrice.toString()}",
+                                              "'₹'${snapshot.data?[index].totalPrice.toString()}",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   color: Colors.grey)))
