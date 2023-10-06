@@ -18,6 +18,19 @@ class APIConstants{
   static const deleteCartItem='/api/deleteCartItem/';
   static const quantityIncrement='/api/cartincrementqnty/';
   static const quantityDecrement='/api/cartdecrementqnty/';
+  static const totalOrderPrice='/api/allOrderPrice/';
+
+  static const viewOrder='/api/viewOrders/';
+  static const placeOrder='/api/placeOrder';
+
+  static const payment='/api/payment';
+
+  static const saveOrderAddress='/api/orderAddressSave/';
+  static const viewOrderAddress='/api/viewOrderAddress/';
+  static const viewSingleOrderAddress='/api/viewSingleOrderAddress/';
+  static const updateOrderAddress='/api/updateOrderAddress/';
+
+
 
   
 }

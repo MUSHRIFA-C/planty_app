@@ -1,10 +1,14 @@
 from django.shortcuts import render
 from django.conf import settings
-from plantsy.serializers import productserializer,registerserializer,loginserializer,ViewCategorySerializer,AddtoCartSerializer
-from plantsy.models import product,register,login,Categories,Cart
+from plantsy.serializers import productserializer,registerserializer,loginserializer,ViewCategorySerializer,AddtoCartSerializer,OrderAddressSerializer,PlaceOrderSerializer,PaymentSerializer
+from plantsy.models import product,register,login,Categories,Cart,OrderAddress
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
+from django.db.models import Sum
+
+from rest_framework import generics
+from rest_framework import filters
 
 
 # Create your views here.
@@ -334,6 +338,200 @@ class Delete_CartAPIView(GenericAPIView):
         delmember = Cart.objects.get(pk=id)
         delmember.delete()
         return Response({'message':'Cart Item deleted successfully','success':True}, status = status.HTTP_200_OK)
+
+
+class TotalorderPriceAPIView(GenericAPIView):
+     def get(self,request,id):
+        carts=Cart.objects.filter(user=id,cart_status=0)
+        print(carts)
+        tot=carts.aggregate(total=Sum('total_price'))['total']
+        Total_prices=str(tot)
+        print(tot)
+        return Response({'data':{'total_price':Total_prices},'message':'get order price successfully','success':True},status=status.HTTP_201_CREATED)
+
+       #Order:
+
+# class PlaceOrderAPIView(GenericAPIView):
+#     serializer_class=PlaceOrderSerializer
+#     def post(self,request):
+#         user=request.data.get('user')
+#         date=request.data.get('date')
+#         carts=Cart.objects.filter(user=user,cart_status=0)
+#         if not carts.exists():
+#             return Response({'message':'No item in cart to place order','success':False},status=status.HTTP_400_BAD_REQUEST)
+
+#         order_data=[]
+#         for i in carts:
+#             order_data.append({
+#                 'user' : user,
+#                 'product' : i.item_id,
+#                 'product_name' : i.itemname,
+#                 'total_price' : i.total_price,
+#                 'expday' : i.expday,
+#                 'quantity' : i.quantity,
+#                 'image' : i.image,
+#                 'category' : i.category,
+#                 'orderdate' : date,
+#                 'order_status' : "0",
+#             })
+#             print("order data ========== ",order_data)
+#             #i.cart_status="1"
+#             i.save()
+#         carts.delete()
+#         serializer = self.serializer_class(data= order_data, many=True)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response({'data':serializer.data,'message':'Order placed successfully','success':True}, status = status.HTTP_201_CREATED)
+#         return Response({'data':serializer.errors,'message':'Invalid','success':False},status=status.HTTP_400_BAD_REQUEST)
+
+class PlaceOrderAPIView(GenericAPIView):
+    serializer_class = PlaceOrderSerializer
+    serializer_class_payment = PaymentSerializer
+
+    def post(self, request):
+        order_id = ''
+        user = request.data.get('user')
+        date = request.data.get('date')
+        orderAddress = request.data.get('orderAddress')
+        contactNum = request.data.get('contactNum')
+        userName = request.data.get('userName')
+        payment_status = "0"
+        carts = Cart.objects.filter(user=user)
+
+        if not carts.exists():
+            return Response({'message': 'No item in cart to place order', 'success': False}, status=status.HTTP_400_BAD_REQUEST)
+
+        order_data = []
+        for cart in carts:  # Iterate through the Cart objects
+            itemName = cart.itemname  # Access properties using dot notation
+            amount = cart.total_price
+
+            order_data.append({
+                'user': user,
+                'product': cart.item_id,
+                'orderAddress' : orderAddress,
+                'contactNum' : contactNum,
+                'userName' : userName,
+                'product_name': cart.itemname,
+                'total_price': cart.total_price,
+                'expday': cart.expday,
+                'quantity': cart.quantity,
+                'image': cart.image,
+                'category': cart.category,
+                'orderdate': date,
+                'order_status': "0",
+            })
+
+            cart.cart_status = "1"
+            cart.save()
+
+        carts.delete()
+        serializer = self.serializer_class(data=order_data, many=True)
+
+        if serializer.is_valid():
+            order = serializer.save()
+            print(order)
+            for i in order:
+                order_id = i.id
+                print(order_id)
+
+        serializer_order = self.serializer_class_payment(data={
+            'order': order_id,
+            'user': user,
+            'name': itemName,
+            'amount': amount,
+            'date': date,
+            'payment_status': payment_status
+        })
+
+        if serializer_order.is_valid():
+            serializer_order.save()
+            return Response({'data': serializer_order.data, 'message': 'Order placed successfully', 'success': True},
+                            status=status.HTTP_201_CREATED)
+
+        return Response({'data': serializer_order.errors, 'message': 'Invalid', 'success': False},
+                        status=status.HTTP_400_BAD_REQUEST)
+
+
+class ViewOrderAddressAPIView(GenericAPIView):
+    def get(self,request,id):
+        queryset=OrderAddress.objects.all().filter(user=id).values()
+        serializer_data=list(queryset)
+        return Response({'data':serializer_data,'message':'all Order Address','success':True},status=status.HTTP_200_OK)
+
+class ViewSingleOrderAddressAPIView(GenericAPIView):
+    def get(self,request,id):
+        queryset=OrderAddress.objects.get(pk=id)
+        serializer=OrderAddressSerializer(queryset)
+        return Response({'data':serializer.data,'message':'Single Order Address','success':True},status=status.HTTP_200_OK)
+    
+class UpdateOrderAddressSerializerAPIView(GenericAPIView):
+    serializer_class = OrderAddressSerializer
+    def put(self,request,id):
+        queryset=OrderAddress.objects.get(pk=id)
+        print(queryset)
+        serializer=OrderAddressSerializer(instance=queryset,data=request.data,partial=True)
+        print(serializer)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'data':serializer.data,'message':'Update data Successfully','success':True},status=status.HTTP_200_OK)
+        else:
+            return Response({'data':'Something went wrong','success':False},status=status.HTTP_400_BAD_REQUEST)
+
+
+class SaveOrderAddressAPIView(GenericAPIView):
+    serializer_class=OrderAddressSerializer
+    def post(self,request,id):
+        user=request.data.get("user")
+        pincode=request.data.get("pincode")
+        city=request.data.get("city")
+        state=request.data.get("state")
+        area=request.data.get("area")
+        buildingName=request.data.get("buildingName")
+        landmark=request.data.get("landmark")
+        addressType=request.data.get("addressType")
+        orderAddressStatus="0"
+
+        user_id = register.objects.get(id=user)
+        user_id.userstatus = "1"
+        user_id.save()
+
+        data=register.objects.all().filter(id=user).values()
+        for i in data :
+            name=i['fullname']
+            print(name)
+            contact=i['phonenumber']
+            print(contact)
+        serializer=self.serializer_class(data={'user':user,'name':name,'contact':contact,'pincode':pincode,'city':city,'state':state,'area':area,'buildingName':buildingName,'landmark':landmark,'addressType':addressType,'orderAddressStatus':orderAddressStatus})
+        print(serializer)
+        if serializer.is_valid():
+            print('hai')
+            serializer.save()
+            return Response({'data':serializer.data,'message':'Your address saved Successfully','success':True},status = status.HTTP_201_CREATED)
+        return Response({'data':serializer.errors,'message':'Failed','success':False},status = status.HTTP_400_BAD_REQUEST)
+
+             #payment
+
+# class PaymentSerializerAPIView(GenericAPIView):
+#     serializer_class=PaymentSerializer
+#     def post(self,request):
+#         user=request.data.get('user')
+#         date=request.data.get('date')
+#         amount=request.data.get('amount')
+#         payment_status="0"
+#         data=outsiders.objects.all().filter(id=user).values()
+#         for i in data:
+#             name=i['fullnameController']
+#         serializer=self.serializer_class(data={'user':user,'date':date,'amount':amount,'payment_status':payment_status,'name':name})
+#         print(serializer)
+#         if serializer.is_valid():
+#             print('hai')
+#             serializer.save()
+#             return Response({'data':serializer.data,'message':'Your payment done  Successfully','success':True},status = status.HTTP_201_CREATED)
+#         return Response({'data':serializer.errors,'message':'Failed','success':False},status = status.HTTP_400_BAD_REQUEST)
+
+
+
 
 
 

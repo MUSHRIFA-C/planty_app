@@ -31,7 +31,7 @@ class _CartPageState extends State<CartPage> {
 
   late SharedPreferences prefs;
   late int outid;
-  late int loginId;
+  //late int loginId;
   var _loaddata;
   User? userDetails;
 
@@ -44,7 +44,7 @@ class _CartPageState extends State<CartPage> {
     }
     );
     print(outid);
-    //fetchTotalPrice();
+    fetchTotalPrice();
   }
 
   /*Future<void> CheckAndNavigate() async {
@@ -74,7 +74,7 @@ class _CartPageState extends State<CartPage> {
     getoutId();
   }
 
-  /*Future<void> fetchTotalPrice() async {
+  Future<void> fetchTotalPrice() async {
     try {
       var response = await Apiservice().getData(APIConstants.totalOrderPrice + outid.toString());
       if (response.statusCode == 201) {
@@ -95,7 +95,7 @@ class _CartPageState extends State<CartPage> {
     } catch (e) {
       print("Error: $e");
     }
-  }*/
+  }
 
   double counter = 0;
 
