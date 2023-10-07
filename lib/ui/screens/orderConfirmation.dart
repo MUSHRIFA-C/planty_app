@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:expansion_widget/expansion_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/const/api_constants.dart';
-import 'package:flutter_onboarding/models/cart.dart';
+import 'package:flutter_onboarding/constants.dart';
+import 'package:flutter_onboarding/models/addtocart.dart';
 import 'package:flutter_onboarding/models/orderAddress.dart';
 import 'package:flutter_onboarding/services/Categoryservice.dart';
 import 'package:flutter_onboarding/services/authdata.dart';
@@ -36,8 +37,8 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
 
   void getoutId() async {
     prefs = await SharedPreferences.getInstance();
-    loginId = (prefs.getInt('login_id') ?? 0);
-    outid = (prefs.getInt('user_id') ?? 0 ) ;
+    //loginId = (prefs.getInt('login_id') ?? 0);
+    outid = (prefs.getInt('login_id') ?? 0 ) ;
     setState(() {
 
     });
@@ -246,14 +247,14 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                       /* Text(
+                                        Text(
                                           "Delivered in ${snapshot.data![index].expday} days",
                                           style: TextStyle(
                                               color: Colors.teal.shade800,
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16
                                           ),
-                                        ),*/
+                                        ),
                                         const SizedBox(height: 3),
                                         Container(
                                           constraints: BoxConstraints(
@@ -270,13 +271,6 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
-                                        /*const SizedBox(height: 3),
-                                        Text(
-                                          "${snapshot.data![index].breedname}",
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),*/
                                       ],
                                     ),
                                   ],
@@ -410,7 +404,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                             value: "cashOnDelivery",
                             groupValue: paymentType,
                             contentPadding: const EdgeInsets.only(left: 5),
-                            activeColor: Colors.teal.shade800,
+                            activeColor: Constants.primaryColor,
                             onChanged: (value){
                               setState(() {
                                 paymentType = value.toString();
@@ -433,21 +427,27 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
 
       bottomNavigationBar: InkWell(
         onTap: () {
-          orderAddress='${_orderAddress[0].buildingName}, ${_orderAddress[0].area}, ${_orderAddress[0].city}, ${_orderAddress[0].state} - ${_orderAddress[0].pincode}';
+          orderAddress='${_orderAddress[0].buildingName}, '
+              '${_orderAddress[0].area}, '
+              '${_orderAddress[0].city},'
+              ' ${_orderAddress[0].state} - ${_orderAddress[0].pincode}';
 
           print(orderAddress);
-          PlaceOrderAPI.placeOrder(context,orderAddress,'${_orderAddress[0].name}','${_orderAddress[0].contact}');
+
+          PlaceOrderAPI.placeOrder(context,orderAddress,
+              '${_orderAddress[0].name}',
+              '${_orderAddress[0].contact}');
         },
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.teal.shade800,
+            color: Constants.primaryColor,
             borderRadius: BorderRadius.circular(10),
           ),
           height: 55,
           margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: const Center(
             child: Text(
-              'Place Order',
+              'Confirm Order',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,

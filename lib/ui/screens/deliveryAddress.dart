@@ -1,7 +1,11 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:flutter_onboarding/const/api_constants.dart';
 import 'package:flutter_onboarding/models/orderAddress.dart';
 import 'package:flutter_onboarding/models/user.dart';
 import 'package:flutter_onboarding/services/saveOrderAddress.dart';
+import 'package:flutter_onboarding/services/viewProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DeliveryAddress extends StatefulWidget {
@@ -37,10 +41,10 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
     //loginid = (prefs.getInt('login_id') ?? 0 ) ;
     outid = (prefs.getInt('login_id') ?? 0 ) ;
 
-    fetchUserDetails(outid);
+   // fetchUserDetails(outid);
   }
 
-  Future<OrderAddress?> fetchUserDetails(int uId) async {
+ /* Future<OrderAddress?> fetchUserDetails(int uId) async {
     try {
       final details = await ViewProfileAPI().getViewProfile(uId);
       userDetails=details;
@@ -55,13 +59,27 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
       print('Failed to fetch user details: $e');
       return null; // Return null in case of an error
     }
-  }
+  }*/
+  Future<void> _viewPro() async {
+    prefs = await SharedPreferences.getInstance();
+    outid = (prefs.getInt('login_id') ?? 0 ) ;
+    final urls = APIConstants.url + APIConstants.viewProfile + outid.toString();
+    var response = await http.get(Uri.parse(urls));
+    var body = json.decode(response.body);
+    print(body);
+    setState(() {
+      name = body['data']['fullname'];
+     // email = body['data']['email'];
+      contact = body['data']['phonenumber'];
 
+    });
+  }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getoutId();
+    _viewPro();
   }
 
   @override
@@ -369,7 +387,14 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
         onTap: () {
           // Handle the save address action
           // Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderConfirmation()));
-          saveAddress.saveOrderAddress(context, outid, pincodeController.text.trim(), cityController.text.trim(), stateController.text.trim(), areaController.text.trim(), buildingNameController.text.trim(), lanmarkController.text.trim(), addressType);
+          saveAddress.saveOrderAddress(context, outid,
+              pincodeController.text.trim(),
+              cityController.text.trim(),
+              stateController.text.trim(),
+              areaController.text.trim(),
+              buildingNameController.text.trim(),
+              lanmarkController.text.trim(),
+              addressType);
         },
         child: Container(
           decoration: BoxDecoration(

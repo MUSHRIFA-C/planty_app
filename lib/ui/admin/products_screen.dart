@@ -51,7 +51,6 @@ class _ProductviewState extends State<Productview> {
               scrollDirection: Axis.vertical,
               itemCount: snapshot.data?.detaildata?.length,
               itemBuilder: (context, index) {
-
                 print(snapshot.data?.detaildata?[index].image);
 
                   return GestureDetector(
@@ -77,20 +76,25 @@ class _ProductviewState extends State<Productview> {
                               snapshot.data!.detaildata![index].name!,
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            trailing: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                primary: Constants.primaryColor,
-                              ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        Productupdate(id: snapshot.data!.detaildata![index].id!),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Constants.primaryColor,
                                   ),
-                                );
-                              },
-                              child: const Text('Update'),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            Productupdate(id: snapshot.data!.detaildata![index].id!),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text('Update'),
+                                ),
+                              ],
                             ),
                           ),
                         ],

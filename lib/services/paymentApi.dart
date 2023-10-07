@@ -14,7 +14,7 @@ class PaymentAPI{
     datetime1 = DateFormat("yyyy-MM-dd").format(datetime);
 
     SharedPreferences localstorage = await SharedPreferences.getInstance();
-    int userId = (localstorage.getInt('user_id') ?? 0 ) ;
+    int userId = (localstorage.getInt('login_id') ?? 0 ) ;
     try{
       var data={
         "user": userId.toString(),
@@ -30,7 +30,7 @@ class PaymentAPI{
         // ScaffoldMessenger.of(context).showSnackBar(
         //     SnackBar(content: Text(body['message']),
         //     ));
-        print('hau');
+        print('hai');
       }
       else {
         print('error');

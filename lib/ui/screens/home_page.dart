@@ -86,9 +86,9 @@ late int plantid;
                                   border: InputBorder.none,
                                   focusedBorder: InputBorder.none,
                                 ),
-                              )),
-                          Icon(
-                            Icons.mic,
+                              )
+                          ),
+                          Icon(Icons.mic,
                             color: Colors.black54.withOpacity(.6),
                           ),
                         ],
@@ -143,11 +143,12 @@ late int plantid;
                       plantid=_plantList[index].id!;
                       return GestureDetector(
                         onTap: () {
+                          print("$_plantList[index].id!");
                           Navigator.push(
                               context,
                               PageTransition(
                                   child: DetailPage(
-                                    plantId:plantid,
+                                    plantId:_plantList[index].id!,
                                   ),
                                   type: PageTransitionType.bottomToTop));
                         },
@@ -265,13 +266,19 @@ late int plantid;
                         physics: const BouncingScrollPhysics(),
                         itemCount: _plantList.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return GestureDetector(
+                          return InkWell(
                               onTap: () {
-                                setState(() {});
-                                Navigator.push(context, PageTransition(
-                                child: DetailPage(
-                                    plantId: _plantList[index].id!.toInt()),
-                                type: PageTransitionType.bottomToTop));
+                                setState(() {
+                                  print("----tapped");
+                                  Navigator.push(
+                                      context,
+                                      PageTransition(
+                                          child: DetailPage(
+                                            plantId:_plantList[index].id!,
+                                          ),
+                                          type: PageTransitionType.bottomToTop));
+                                });
+
                               },
                               child: PlantWidget(index: index,
                                   plantList: _plantList));

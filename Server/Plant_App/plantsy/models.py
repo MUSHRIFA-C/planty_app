@@ -20,6 +20,7 @@ class product(models.Model):
     rating = models.CharField(max_length =50, null= True)
     image = models.ImageField(upload_to = 'images/', null=True)
     category=models.CharField(max_length =50, null= True)
+    expdate=models.CharField(max_length=200,default='10')
     
     def __str__(self):
         return self.name
@@ -38,6 +39,7 @@ class register(models.Model):
     phonenumber = models.CharField(max_length =50, null= True)
     password = models.CharField(max_length =50, null= True)
     role = models.CharField(max_length =50)
+    userstatus=models.CharField(max_length=10)
     log_id=models.OneToOneField(login,on_delete=models.CASCADE)
     
     def __str__(self):

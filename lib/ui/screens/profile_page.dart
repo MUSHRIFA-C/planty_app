@@ -1,6 +1,7 @@
-
 import 'dart:convert';
+import 'package:flutter_onboarding/ui/root_page.dart';
 import 'package:flutter_onboarding/ui/screens/home_page.dart';
+import 'package:flutter_onboarding/ui/screens/signin_page.dart';
 import 'package:http/http.dart'as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/const/api_constants.dart';
@@ -51,6 +52,14 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => SignIn()),
+          (route) => false,
+    );
+  }
 
 
   @override
@@ -102,8 +111,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   backgroundColor: Colors.white,
                   child: CircleAvatar(
                     radius: 40,
-                    backgroundColor: Colors.teal.shade800,
-                    child: Text(name[0],style: TextStyle(
+                    backgroundColor: Constants.primaryColor,
+                    child: Text(name,style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 41,
                         color: Colors.white
@@ -131,7 +140,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               borderRadius: BorderRadius.circular(10),
                               boxShadow:[
                                 BoxShadow(
-                                    color: Colors.teal.shade800,
+                                    color: Constants.primaryColor,
                                     blurRadius: 16,
                                     offset: Offset(2, 7)
                                 )]
@@ -215,32 +224,64 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                         SizedBox(height: 65,),
+                        Row(
+                          children: [
+                            Container(
+                              height: 50,
+                              margin: EdgeInsets.symmetric(horizontal: 100),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10,),
+                                  color: Constants.primaryColor,
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.grey.shade400,
+                                        blurRadius: 2,
+                                        offset: Offset(4,4),
+                                        spreadRadius: 1
+                                    )]
+                              ),
+                              child: Center(
+                                child: TextButton(
+                                  child: Text('Edit Profile',
+                                    style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+                                  onPressed: (){
+                                    //Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+                                    updateUserProfile.updateProfile(context,
+                                        fullnameController.text,
+                                        contactController.text,
+                                        emailController.text);},
+                                ),
+                              ),
+
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: 10,),
                         Container(
                           height: 50,
-                          margin: EdgeInsets.symmetric(horizontal: 100),
+                          margin: EdgeInsets.symmetric(horizontal: 10),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10,),
-                              color: Colors.teal.shade800,
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey.shade400,
-                                    blurRadius: 2,
-                                    offset: Offset(4,4),
-                                    spreadRadius: 1
-                                )]
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.teal.shade800,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.shade400,
+                                blurRadius: 2,
+                                offset: Offset(4, 4),
+                                spreadRadius: 1,
+                              ),
+                            ],
                           ),
-                          child: Center(
-                            child: TextButton(
-                              child: Text('Edit Profile',
-                                style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18),),
-                              onPressed: (){
-                                //Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
-                                updateUserProfile.updateProfile(context,
-                                    fullnameController.text,
-                                    contactController.text,
-                                    emailController.text);
-                              },
+                          child: TextButton(
+                            child: Text(
+                              'Logout',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
                             ),
+                            onPressed: logout,
                           ),
                         ),
                       ],

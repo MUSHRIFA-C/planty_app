@@ -15,7 +15,7 @@ class PlaceOrderAPI{
     datetime1 = DateFormat("yyyy-MM-dd").format(datetime);
 
     SharedPreferences localstorage = await SharedPreferences.getInstance();
-    int userId = (localstorage.getInt('user_id') ?? 0 ) ;
+    int userId = (localstorage.getInt('login_id') ?? 0 ) ;
     try{
       var data={
         "user": userId.toString(),
@@ -29,10 +29,10 @@ class PlaceOrderAPI{
       var response = await http.post(Uri.parse(urls),body: data);
       var body = json.decode(response.body);
       if (body['success'] == true) {
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //     SnackBar(content: Text(body['message']),
-        //     ));
-        //Navigator.push(context, MaterialPageRoute(builder: (context)=>const OrderSuccessMessage()));
+        ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(body['message']),
+            ));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>const OrderSuccessMessage()));
       }
       else {
         ScaffoldMessenger.of(context).showSnackBar(

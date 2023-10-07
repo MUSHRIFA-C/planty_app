@@ -11,7 +11,7 @@ from rest_framework import generics
 from rest_framework import filters
 
 
-# Create your views here.
+         # Create your views here.
 
 class UserRegisterAPIView(GenericAPIView):
     serializer_class = registerserializer
@@ -24,6 +24,7 @@ class UserRegisterAPIView(GenericAPIView):
         phonenumber = request.data.get('phonenumber')
         password = request.data.get('password')
         role = request.data.get('role')
+        userstatus='0'
 
         if(login.objects.filter(email=email1)):
             return Response({'message': 'Duplicate Username Found'},status.HTTP_400_BAD_REQUEST)
@@ -43,6 +44,7 @@ class UserRegisterAPIView(GenericAPIView):
                 'phonenumber': phonenumber,
                 'password': password,
                 'role': role,
+                'userstatus':userstatus,
             })
         print(serializer)
         if serializer.is_valid():
@@ -60,10 +62,8 @@ class LoginAPIView(GenericAPIView):
         email1 = request.data.get('email')
         password = request.data.get('password')
         
-
         print(email1)
         print(password)
-
         logreg = login.objects.filter(email=email1, password=password)
         if(logreg.count()>0):
             read_serializer= loginserializer(logreg, many= True)
@@ -75,6 +75,7 @@ class LoginAPIView(GenericAPIView):
                 print(regdata)
                 for i in regdata:
                     u_id = i['id']
+                    l_status=i['userstatus']
                     name = i['fullname']
                     print(u_id)
 
@@ -83,7 +84,8 @@ class LoginAPIView(GenericAPIView):
                     'login_id':id,
                     'email': email1,
                     'role': role,
-                    'password': password
+                    'password': password,
+                    'l_status':l_status,
                     },
                 'success': True,
                 'message': 'Logged In Successfully'
@@ -144,7 +146,7 @@ class ViewCategoryAPIView(GenericAPIView):
         
 
 
-        #view all product
+         #view all product
 
 class Get_All_productAPIView(GenericAPIView):
     serializer_class = productserializer
@@ -158,7 +160,7 @@ class Get_All_productAPIView(GenericAPIView):
             return Response({'data': 'non data available', 'success': False}, status = status.HTTP_201_CREATED)
 
 
-        #view single product admin
+         #view single product admin
 
 class Get_single_productAPIView(GenericAPIView):
     def get(self,request,id):
@@ -167,7 +169,7 @@ class Get_single_productAPIView(GenericAPIView):
         return Response({'data': serializer.data,'message': 'single user data', 'success':True}, status= status.HTTP_200_OK)
 
 
-        #delete product
+               #delete product
 
 class Delete_productAPIView(GenericAPIView):
     def delete(self,request,id):
@@ -214,7 +216,7 @@ class SingleUserUpdateProfileSerializerAPIView(GenericAPIView):
         else:
             return Response({'data':'Something went wrong','success':False},status=status.HTTP_400_BAD_REQUEST)
 
-      #cart add,dlt,view,increm,decrem
+       #cart add,dlt,view,increm,decrem
 
 class AddtoCartAPIView(GenericAPIView):
     serializer_class=AddtoCartSerializer
@@ -240,9 +242,9 @@ class AddtoCartAPIView(GenericAPIView):
             for i in data:
                 print(i)
                 prices=i['price']
-                # p_status=i['petstatus']
                 ctgry=i['category']
                 name=i['name']
+                expday=i['expdate']
                 print(ctgry)
                 price=int(prices)
                 print(price)
@@ -255,7 +257,7 @@ class AddtoCartAPIView(GenericAPIView):
             print(image)
                 
 
-            serializer = self.serializer_class(data= {'user':user,'item':item,'quantity':quantity,'total_price':tp,'cart_status':cart_status,'category':ctgry,'image':product_image,'itemname':name})
+            serializer = self.serializer_class(data= {'user':user,'item':item,'quantity':quantity,'total_price':tp,'cart_status':cart_status,'category':ctgry,'image':product_image,'itemname':name,'expday':expday})
             print(serializer)
             if serializer.is_valid():
                 print("hi")
@@ -278,6 +280,7 @@ class SingleCartAPIView(GenericAPIView):
             obj['image'] =settings.MEDIA_URL+str(obj['image'])   
         return Response({'data' : serialized_data, 'message':'single product data','success':True},status=status.HTTP_200_OK) 
     
+
 class CartIncrementQuantityAPIView(GenericAPIView):
     def put(self, request, id):
         cart_item = Cart.objects.get(pk=id)
@@ -302,6 +305,7 @@ class CartIncrementQuantityAPIView(GenericAPIView):
         base_url=request.build_absolute_uri('/')[:-1]
         serialized_data['image']=str(serialized_data['image']).replace(base_url,'')
         return Response({'data' : serialized_data, 'message':'cart item quantity updated','success':True},status=status.HTTP_200_OK)
+
 
 class CartDecrementQuantityAPIView(GenericAPIView):
     def put(self, request, id):
@@ -332,6 +336,7 @@ class CartDecrementQuantityAPIView(GenericAPIView):
             return Response({'data' : serialized_data, 'message':'cart item quantity updated','success':True},status=status.HTTP_200_OK)
         else:
             return Response({'message':'Quantity cannot be less than 1','success':False},status=status.HTTP_400_BAD_REQUEST)
+
 
 class Delete_CartAPIView(GenericAPIView):
     def delete(self, request, id):

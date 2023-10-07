@@ -2,15 +2,18 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/const/api_constants.dart';
 import 'package:flutter_onboarding/constants.dart';
-import 'package:flutter_onboarding/models/cart.dart';
+import 'package:flutter_onboarding/models/addtocart.dart';
 import 'package:flutter_onboarding/models/user.dart';
 import 'package:flutter_onboarding/services/Categoryservice.dart';
 import 'package:flutter_onboarding/services/authdata.dart';
 import 'package:flutter_onboarding/services/decrementcart.dart';
 import 'package:flutter_onboarding/services/deleteCartItem.dart';
 import 'package:flutter_onboarding/services/incrementcart.dart';
+import 'package:flutter_onboarding/services/viewProfile.dart';
+import 'package:flutter_onboarding/ui/screens/deliveryAddress.dart';
 import 'package:flutter_onboarding/ui/screens/detail_page.dart';
 import 'package:flutter_onboarding/ui/screens/home_page.dart';
+import 'package:flutter_onboarding/ui/screens/orderConfirmation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -34,10 +37,9 @@ class _CartPageState extends State<CartPage> {
   //late int loginId;
   var _loaddata;
   User? userDetails;
-
+var body;
   void getoutId() async {
     prefs = await SharedPreferences.getInstance();
-    /*loginId = (prefs.getInt('login_id') ?? 0);*/
     outid = (prefs.getInt('login_id') ?? 0 ) ;
     setState(() {
 
@@ -46,17 +48,16 @@ class _CartPageState extends State<CartPage> {
     print(outid);
     fetchTotalPrice();
   }
-
-  /*Future<void> CheckAndNavigate() async {
+  Future<void> CheckAndNavigate() async {
     try {
       final details = await ViewProfileAPI().getViewProfile(outid);
       userDetails=details;
       setState(() {
         if(userDetails!.userstatus=="1"){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderConfirmation()));
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>DeliveryAddress()));
         }
         else{
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>DeliveryAddress()));
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderConfirmation()));
         }
       });
     }
@@ -65,7 +66,7 @@ class _CartPageState extends State<CartPage> {
       print('Failed to fetch user details: $e');
       return null; // Return null in case of an error
     }
-  }*/
+  }
 
   @override
   void initState() {
@@ -79,9 +80,10 @@ class _CartPageState extends State<CartPage> {
       var response = await Apiservice().getData(APIConstants.totalOrderPrice + outid.toString());
       if (response.statusCode == 201) {
         var items = json.decode(response.body);
-        var body=items['data']['total_price'];
+       body=items['data']['total_price'];
+       print("total value${body}");
         setState(() {
-          _loaddata = body;
+          body;
         });
       } else {
         setState(() {
@@ -196,8 +198,10 @@ class _CartPageState extends State<CartPage> {
                                                   color: Colors.grey.shade300,
                                                   borderRadius:
                                                   BorderRadius.circular(15)),
-                                              child: Image.network(
-                                                  APIConstants.url + snapshot.data![index].image.toString()
+                                              child: Image(
+                                                image: AssetImage("Server/Plant_App${snapshot.data![index].image}"),
+                                                /*Image.network(widget.plantList[widget.index].image ?? '',*/
+                                                fit: BoxFit.cover, // Adjust the BoxFit as needed
                                               ),
                                             ),
                                           ),
@@ -313,33 +317,6 @@ class _CartPageState extends State<CartPage> {
                 },
                 )
             ),
-
-            // Container(
-            //   margin: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
-            //   padding: EdgeInsets.all(15),
-            //   decoration: BoxDecoration(
-            //     color: Colors.white,
-            //     borderRadius: BorderRadius.circular(10),
-            //     boxShadow: [
-            //       BoxShadow(
-            //         color: Colors.teal.withOpacity(0.3),
-            //         spreadRadius: 1,
-            //         blurRadius: 5
-            //       )
-            //     ]),
-            //   child: Column(
-            //     children: [
-            //       Row(
-            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //         children: [
-            //           Text(
-            //             "Sub-Total"
-            //           )
-            //         ],
-            //       )
-            //     ],
-            //   ),
-            // )
           ],
         ),
       ),
@@ -356,7 +333,7 @@ class _CartPageState extends State<CartPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _loaddata==null ?Text(
+              body==null ?Text(
                 '₹ 0',
                 style: TextStyle(
                     fontSize: 20,
@@ -364,7 +341,7 @@ class _CartPageState extends State<CartPage> {
                     fontWeight: FontWeight.w500),
               ):
               Text(
-                '₹ ${_loaddata}',
+                '₹ ${body}',
                 style: TextStyle(
                     fontSize: 20,
                     color: Colors.black,
@@ -372,7 +349,7 @@ class _CartPageState extends State<CartPage> {
               ),
               InkWell(
                 onTap: () {
-                  /*CheckAndNavigate();*/
+                  CheckAndNavigate();
                 },
                 child: Container(
                   height: 50,

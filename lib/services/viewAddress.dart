@@ -9,7 +9,7 @@ class ViewOrderAddress{
 
   Future<List<OrderAddress>> getOrderAddress() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    int userId = (prefs.getInt('user_id') ?? 0 ) ;
+    int userId = (prefs.getInt('login_id') ?? 0 ) ;
     final urls = APIConstants.url + APIConstants.viewOrderAddress + userId.toString();
     var response = await http.get(Uri.parse(urls));
     if (response.statusCode == 200) {

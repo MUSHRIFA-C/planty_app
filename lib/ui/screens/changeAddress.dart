@@ -153,7 +153,7 @@ class _ChangeAddressState extends State<ChangeAddress> {
                               activeColor: Colors.teal.shade800,
                               onChanged: (value) {
 
-                                Navigator.pop(context,_orderAddress[value]);
+                                Navigator.pop(context,_orderAddress[index]);
                                 setState(() {
                                   selectedAddressIndex = value as int;
                                   print(selectedAddressIndex);

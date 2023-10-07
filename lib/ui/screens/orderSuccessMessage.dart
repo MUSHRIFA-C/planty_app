@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_onboarding/constants.dart';
 import 'package:flutter_onboarding/ui/screens/home_page.dart';
+import 'package:flutter_onboarding/ui/screens/myOrder.dart';
 class OrderSuccessMessage extends StatefulWidget {
   const OrderSuccessMessage({Key? key}) : super(key: key);
 
@@ -18,7 +20,7 @@ class _OrderSuccessMessageState extends State<OrderSuccessMessage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image(image: AssetImage('images/ordersuccess.png',),
-            color: Colors.teal.shade800,),
+            color: Constants.primaryColor,),
           Text('Thank you for ordering!',style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -33,7 +35,7 @@ class _OrderSuccessMessageState extends State<OrderSuccessMessage> {
               children: [
                 TextButton(
                   onPressed: (){
-                    //Navigator.push(context, MaterialPageRoute(builder: (context)=>MyOrder()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>MyOrder()));
                   },
                   child: Text('VIEW ORDER',style: TextStyle(
                     fontSize: 14,
@@ -53,7 +55,7 @@ class _OrderSuccessMessageState extends State<OrderSuccessMessage> {
                     color: Colors.white,
                   ),),
                   style: OutlinedButton.styleFrom(
-                      backgroundColor: Colors.teal.shade800,
+                      backgroundColor: Constants.primaryColor,
                       fixedSize: Size(170, 10)
                   ),
                 )

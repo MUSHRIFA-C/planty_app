@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/const/api_constants.dart';
-import 'package:flutter_onboarding/models/cart.dart';
+import 'package:flutter_onboarding/models/addtocart.dart';
 import 'package:flutter_onboarding/services/authdata.dart';
 import 'package:http/http.dart' as http;
 

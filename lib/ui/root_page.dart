@@ -1,12 +1,12 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/constants.dart';
-import 'package:flutter_onboarding/models/cart.dart';
 import 'package:flutter_onboarding/models/plants.dart';
 import 'package:flutter_onboarding/models/product.dart';
 import 'package:flutter_onboarding/ui/screens/cart_page.dart';
 import 'package:flutter_onboarding/ui/screens/favorite_page.dart';
 import 'package:flutter_onboarding/ui/screens/home_page.dart';
+import 'package:flutter_onboarding/ui/screens/myOrder.dart';
 import 'package:flutter_onboarding/ui/screens/profile_page.dart';
 import 'package:flutter_onboarding/ui/screens/signin_page.dart';
 import 'package:page_transition/page_transition.dart';
@@ -30,7 +30,7 @@ class _RootPageState extends State<RootPage> {
     return [
       HomePage(),
       FavoritePage(),
-      CartPage(),
+      MyOrder(),
       ProfilePage(),
     ];
   }
@@ -39,7 +39,7 @@ class _RootPageState extends State<RootPage> {
   List<IconData> iconList = [
     Icons.home,
     Icons.favorite,
-    Icons.shopping_cart,
+    Icons.save,
     Icons.person,
   ];
 
@@ -47,7 +47,7 @@ class _RootPageState extends State<RootPage> {
   List<String> titleList = [
     'Home',
     'Favorite',
-    'Cart',
+    'My order',
     'Profile',
   ];
 
@@ -77,10 +77,10 @@ class _RootPageState extends State<RootPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          Navigator.push(context, PageTransition(child: SignIn(),
+          Navigator.push(context, PageTransition(child: CartPage(),
            type: PageTransitionType.bottomToTop));
         },
-        child: Image.asset('assets/images/logout.png', height: 30.0,),
+        child: Image.asset('assets/images/carticon.png', height: 30.0,),
         backgroundColor: Constants.primaryColor,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

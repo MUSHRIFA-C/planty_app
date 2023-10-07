@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/splash.dart';
 
-import 'ui/onboarding_screen.dart';
 
 void main(){
   runApp(MyApp());
@@ -18,7 +17,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Onboarding Screen',
+     // title: 'Onboarding Screen',
       home: SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
