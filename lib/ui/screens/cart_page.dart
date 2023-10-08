@@ -54,10 +54,10 @@ var body;
       userDetails=details;
       setState(() {
         if(userDetails!.userstatus=="1"){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>DeliveryAddress()));
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderConfirmation()));
         }
         else{
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderConfirmation()));
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>DeliveryAddress()));
         }
       });
     }

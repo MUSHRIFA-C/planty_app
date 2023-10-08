@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_onboarding/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/const/api_constants.dart';
@@ -398,7 +399,7 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
         },
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.teal.shade800,
+            color: Constants.primaryColor,
             borderRadius: BorderRadius.circular(10),
           ),
           height: 55,

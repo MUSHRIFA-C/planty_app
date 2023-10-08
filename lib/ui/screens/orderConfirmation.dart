@@ -101,7 +101,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
         title: Text(
           'Order Confirmation',
           style: TextStyle(
-            color: Colors.teal.shade800,
+            color: Constants.primaryColor,
             fontSize: 18,
           ),
         ),
@@ -148,7 +148,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                               child: Text('Change address',style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 13,
-                                color: Colors.teal.shade800,
+                                color: Constants.primaryColor,
                               ),),
                             ),
                           ],

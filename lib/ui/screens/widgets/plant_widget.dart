@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/constants.dart';
+import 'package:flutter_onboarding/models/favorite.dart';
 import 'package:flutter_onboarding/models/product.dart';
 import 'package:flutter_onboarding/ui/screens/detail_page.dart';
 import 'package:page_transition/page_transition.dart';
 
-
-class PlantWidget extends StatefulWidget {
+class PlantWidget extends StatelessWidget {
   final int index;
+  final List<Favorite> favoriteItem;
   final List<DetailData> plantList;
 
-  const PlantWidget({
+  PlantWidget({
     Key? key,
     required this.index,
+    required this.favoriteItem,
     required this.plantList,
   }) : super(key: key);
 
-  @override
-  _PlantWidgetState createState() => _PlantWidgetState();
-}
-
-class _PlantWidgetState extends State<PlantWidget> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -55,9 +52,7 @@ class _PlantWidgetState extends State<PlantWidget> {
                 child: SizedBox(
                   height: 80.0,
                   child: Image(
-                    image: AssetImage("Server/Plant_App${widget.plantList[widget.index].image}"),
-                  /*Image.network(
-                    widget.plantList[widget.index].image ?? '',*/
+                    image: AssetImage("Server/Plant_App${plantList[index].image}"),
                     fit: BoxFit.cover, // Adjust the BoxFit as needed
                   ),
                 ),
@@ -69,7 +64,7 @@ class _PlantWidgetState extends State<PlantWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.plantList[widget.index].name ?? '',
+                      plantList[index].name ?? '',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
@@ -84,7 +79,7 @@ class _PlantWidgetState extends State<PlantWidget> {
           Container(
             padding: const EdgeInsets.only(right: 10),
             child: Text(
-              r'₹' + (widget.plantList[widget.index].price ?? 0).toString(),
+              r'₹' + (plantList[index].price ?? 0).toString(),
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18.0,

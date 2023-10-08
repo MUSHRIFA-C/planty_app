@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.conf import settings
-from plantsy.serializers import productserializer,registerserializer,loginserializer,ViewCategorySerializer,AddtoCartSerializer,OrderAddressSerializer,PlaceOrderSerializer,PaymentSerializer
-from plantsy.models import product,register,login,Categories,Cart,OrderAddress
+from plantsy.serializers import productserializer,registerserializer,loginserializer,ViewCategorySerializer,AddtoCartSerializer,OrderAddressSerializer,PlaceOrderSerializer,PaymentSerializer,FavoriteItemSerializer
+from plantsy.models import product,register,login,Categories,Cart,OrderAddress,Order,Favorite
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
@@ -458,6 +458,15 @@ class PlaceOrderAPIView(GenericAPIView):
                         status=status.HTTP_400_BAD_REQUEST)
 
 
+class ViewOrdersSerializerAPIView(GenericAPIView):
+    def get(self,request,userId):
+        queryset=Order.objects.all().filter(user=userId).values()
+        serializer_data=list(queryset)
+        for obj in serializer_data:
+            obj['image'] =settings.MEDIA_URL+str(obj['image'])
+        return Response({'data':serializer_data,'message':'all order details','success':True},status=status.HTTP_200_OK)
+
+
 class ViewOrderAddressAPIView(GenericAPIView):
     def get(self,request,id):
         queryset=OrderAddress.objects.all().filter(user=id).values()
@@ -534,6 +543,71 @@ class SaveOrderAddressAPIView(GenericAPIView):
 #             serializer.save()
 #             return Response({'data':serializer.data,'message':'Your payment done  Successfully','success':True},status = status.HTTP_201_CREATED)
 #         return Response({'data':serializer.errors,'message':'Failed','success':False},status = status.HTTP_400_BAD_REQUEST)
+  
+
+          #favorite:
+
+class FavoriteItemAPIView(GenericAPIView):
+    serializer_class=FavoriteItemSerializer
+    def post(self, request):
+        user = request.data.get('user')
+        item=request.data.get('item')
+        favStatus="1"
+        carts = Favorite.objects.filter(user=user, item=item)
+        if carts.exists():
+            return Response({'message':'Item is already in Favorite','success':False}, status=status.HTTP_400_BAD_REQUEST)
+
+        else:
+            data=product.objects.all().filter(id=item).values()
+            for i in data:
+                prices=i['price']
+                name=i['name']
+
+            producto = product.objects.get(id=item)
+            product_image = producto.image
+
+            serializer = self.serializer_class(data= {'user':user,'item':item,'item_name':name,'image':product_image,'price':prices,'favStatus':favStatus})
+            print(serializer)
+            if serializer.is_valid():
+                print("hi")
+                serializer.save()
+                return Response({'data':serializer.data,'message':'Item added to Favorite successfully', 'success':True}, status = status.HTTP_201_CREATED)
+            return Response({'data':serializer.errors,'message':'Invalid','success':False}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ViewFavoriteItemsAPIView(GenericAPIView):
+    def get(self, request, id):
+
+        u_id=""
+        qset =register.objects.all().filter(pk=id).values()
+        for i in qset:
+            u_id=i['id']
+            
+        data = Favorite.objects.filter(user=u_id).values()
+        serialized_data=list(data)
+        print(serialized_data)
+        for obj in serialized_data:
+            obj['image'] =settings.MEDIA_URL+str(obj['image'])   
+        return Response({'data' : serialized_data, 'message':'single product data','success':True},status=status.HTTP_200_OK)
+
+class Delete_FavoriteItemAPIView(GenericAPIView):
+    def delete(self, request, id):
+        delmember = Favorite.objects.get(pk=id)
+        delmember.delete()
+        return Response({'message':'Fav Item deleted successfully','success':True}, status = status.HTTP_200_OK)
+    
+
+#from django.db.models import Q
+
+class Delete_FavoriteItemInHomePageAPIView(GenericAPIView):
+    def delete(self, request, itemId):
+        # Use Q objects to create an OR condition
+        delmember = Favorite.objects.filter(item=itemId)
+        if delmember:
+            delmember.delete()
+            return Response({'message': 'Fav Item deleted successfully', 'success': True}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'Favorite item not found', 'success': False}, status=status.HTTP_404_NOT_FOUND)
 
 
 

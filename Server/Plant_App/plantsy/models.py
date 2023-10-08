@@ -81,10 +81,20 @@ class Order(models.Model):
     orderdate = models.CharField(max_length=100)
     quantity = models.CharField(max_length=500,blank=True, null=True)
     total_price = models.IntegerField()
-    image = models.ImageField(upload_to='images',blank=True, null=True)
+    image = models.ImageField(upload_to='images/',blank=True, null=True)
     category = models.CharField(max_length=500,blank=True, null=True)
     expday = models.CharField(max_length=100,default='10')
     order_status = models.CharField(max_length=500,blank=True, null=True)
+
+class Favorite(models.Model):
+    item=models.ForeignKey(product,on_delete=models.CASCADE,null=True,blank=True)
+    user=models.ForeignKey(register,on_delete=models.CASCADE)
+    item_name=models.CharField(max_length=500)
+    image=models.ImageField(upload_to='images/')
+    price=models.CharField(max_length=300)
+    favStatus=models.CharField(max_length=200)
+    def __str__(self):
+        return self.item_name
 
 class payment(models.Model):
     user = models.ForeignKey(register, on_delete=models.CASCADE)

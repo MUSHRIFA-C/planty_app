@@ -20,15 +20,20 @@ class APIConstants{
   static const quantityDecrement='/api/cartdecrementqnty/';
   static const totalOrderPrice='/api/allOrderPrice/';
 
+  static const payment='/api/payment';
+
   static const viewOrder='/api/viewOrders/';
   static const placeOrder='/api/placeOrder';
-
-  static const payment='/api/payment';
 
   static const saveOrderAddress='/api/orderAddressSave/';
   static const viewOrderAddress='/api/viewOrderAddress/';
   static const viewSingleOrderAddress='/api/viewSingleOrderAddress/';
   static const updateOrderAddress='/api/updateOrderAddress/';
+
+  static const favoriteItem='/api/favoriteItem';
+  static const viewFavoriteItem='/api/viewFavoriteItem/';
+  static const deleteFavoriteItem='/api/deleteFavoriteItem/';
+  static const deleteFavoriteItemInHomePage = '/api/deleteFavoriteItemInHomePage/';
 
 
 

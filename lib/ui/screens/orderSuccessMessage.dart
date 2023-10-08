@@ -19,7 +19,7 @@ class _OrderSuccessMessageState extends State<OrderSuccessMessage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image(image: AssetImage('images/ordersuccess.png',),
+          Image(image: AssetImage('assets/images/ordersuccess.png',),
             color: Constants.primaryColor,),
           Text('Thank you for ordering!',style: TextStyle(
             fontSize: 22,

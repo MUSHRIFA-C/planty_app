@@ -30,7 +30,7 @@ class PlaceOrderAPI{
       var body = json.decode(response.body);
       if (body['success'] == true) {
         ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(body['message']),
+            SnackBar(content: Text(body['message']),
             ));
         Navigator.push(context, MaterialPageRoute(builder: (context)=>const OrderSuccessMessage()));
       }

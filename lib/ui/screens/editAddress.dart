@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_onboarding/constants.dart';
 import 'package:flutter_onboarding/models/orderAddress.dart';
 import 'package:flutter_onboarding/services/updateOrderAddress.dart';
 import 'package:flutter_onboarding/services/viewSingleOrderAddress.dart';
@@ -83,7 +84,7 @@ class _EditAddressState extends State<EditAddress> {
         title: Text(
           'Edit Address',
           style: TextStyle(
-            color: Colors.teal.shade800,
+            color: Constants.primaryColor,
             fontSize: 18,
           ),
         ),
@@ -106,7 +107,7 @@ class _EditAddressState extends State<EditAddress> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text("Contact Info",style: TextStyle(
-                      color: Colors.teal.shade700,
+                      color: Constants.primaryColor,
                       fontWeight: FontWeight.w800,
                       fontSize: 19
                   ),),

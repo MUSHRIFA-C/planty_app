@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_onboarding/constants.dart';
 import 'package:flutter_onboarding/models/orderAddress.dart';
 import 'package:flutter_onboarding/services/viewAddress.dart';
 import 'package:flutter_onboarding/ui/screens/deliveryAddress.dart';
@@ -45,7 +46,7 @@ class _ChangeAddressState extends State<ChangeAddress> {
           title: Text(
             'Delivery Address',
             style: TextStyle(
-              color: Colors.teal.shade800,
+              color: Constants.primaryColor,
               fontSize: 18,
             ),
           ),
@@ -176,7 +177,7 @@ class _ChangeAddressState extends State<ChangeAddress> {
                             child: Text(
                               'Edit',
                               style: TextStyle(
-                                color: Colors.teal.shade700,
+                                color: Constants.primaryColor,
                                 fontWeight: FontWeight.w500,
                               ),
                             )

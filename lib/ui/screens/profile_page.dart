@@ -30,6 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String contact='';
 
   UpdateProfile updateUserProfile = UpdateProfile();
+  
 
 
   Future<void> _viewPro() async {

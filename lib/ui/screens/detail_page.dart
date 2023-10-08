@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_onboarding/services/favoriteItemService.dart';
 import 'package:http/http.dart'as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/const/api_constants.dart';
@@ -76,7 +77,7 @@ class _DetailPageState extends State<DetailPage> {
     Size sizes = MediaQuery.of(context).size;
 
     List<DetailData> _plantList =[];
-    //List<Product> _plantList = Product.plantList;
+
 
     return Scaffold(
       body: Stack(
@@ -118,17 +119,17 @@ class _DetailPageState extends State<DetailPage> {
                     ),
                     child: IconButton(
                         onPressed: () {
-
-                          setState(() {
-                            /* bool isFavorited = toggleIsFavorated(
+                          FavoriteItemAPI.FavoriteItem(context: context, productId: widget.plantId);
+                          /*setState(() {
+                            *//* bool isFavorited = toggleIsFavorated(
                                 _plantList[widget.plantId].isFavorated);
                             _plantList[widget.plantId].isFavorated =
-                                isFavorited;*/
-                          });
+                                isFavorited;*//*
+                          });*/
                         },
                         icon: Icon(
-                          // _plantList[widget.plantId].isFavorated == true?
-                          // Icons.favorite:
+                          _plantList[widget.plantId] == true?
+                          Icons.favorite:
                           Icons.favorite_border,
                           color: Constants.primaryColor,
                         )),
@@ -281,12 +282,6 @@ class _DetailPageState extends State<DetailPage> {
               width: 50,
               child: IconButton(onPressed: (){
                 ViewCategoryApi().addtoCart(context: context, userId: loginId, productId: widget.plantId);
-
-                /*setState(() {
-                  bool isSelected = toggleIsSelected(_plantList[widget.plantId].id as bool);
-                  _plantList[widget.plantId].id = isSelected as int?;
-                }
-                );*/
               },
                   icon: Icon(
                     Icons.shopping_cart,

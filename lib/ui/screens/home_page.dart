@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/constants.dart';
+import 'package:flutter_onboarding/models/favorite.dart';
 import 'package:flutter_onboarding/models/product.dart';
+import 'package:flutter_onboarding/services/viewFavItem.dart';
 import 'package:flutter_onboarding/services/viewUserPlant.dart';
 import 'package:flutter_onboarding/ui/screens/detail_page.dart';
 import 'package:flutter_onboarding/ui/screens/widgets/plant_widget.dart';
@@ -15,13 +17,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  @override
-  void initState() {
-    super.initState();
-    _loadPlantData(); // Load plant data when the page initializes
-  }
 
   List<DetailData> _plantList =[];
+  List<Favorite> _favoriteItem = [];
+  List _favoritePlantItem=[];
 
 
   Future<void> _loadPlantData() async {
@@ -35,7 +34,21 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> fetchFavoriteItems() async {
+    List<Favorite> data = await ViewFavoriteItems().getFavoriteItems();
+    setState(() {
+      _favoriteItem=data;
+      _favoritePlantItem = data.map((e) => e.item).toList();
+    });
+  }
+
 late int plantid;
+  @override
+  void initState() {
+    super.initState();
+    _loadPlantData();// Load plant data when the page initializes
+    fetchFavoriteItems();
+  }
 
   Widget build(BuildContext context) {
     int selectedIndex = 0;
@@ -281,7 +294,8 @@ late int plantid;
 
                               },
                               child: PlantWidget(index: index,
-                                  plantList: _plantList));
+                                  plantList: _plantList,
+                                favoriteItem: _favoriteItem));
                         },
                 ),
               ),

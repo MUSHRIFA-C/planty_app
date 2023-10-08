@@ -114,7 +114,8 @@ class _MyOrderState extends State<MyOrder> {
                     (BuildContext context, int index) {
                   return GestureDetector(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailPage(plantId:_plantList[index].id!)));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailPage(
+                          plantId:_plantList[index].id!)));
                     },
                     child: Column(
                       children: [
@@ -123,7 +124,8 @@ class _MyOrderState extends State<MyOrder> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Image.network(APIConstants.url+filterdlist[index].image.toString(),width: 85,height: 85,),
+                              Image.network(APIConstants.url+filterdlist[index].image.toString(),
+                                width: 85,height: 85,),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
