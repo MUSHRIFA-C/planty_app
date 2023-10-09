@@ -1,5 +1,8 @@
 import 'dart:convert';
+import 'package:flutter_onboarding/models/favorite.dart';
+import 'package:flutter_onboarding/services/deleteFavItemInHome.dart';
 import 'package:flutter_onboarding/services/favoriteItemService.dart';
+import 'package:flutter_onboarding/services/viewFavItem.dart';
 import 'package:http/http.dart'as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/const/api_constants.dart';
@@ -11,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailPage extends StatefulWidget {
   final int plantId;
+
   const DetailPage({Key? key,
     required this.plantId
   }) : super(key: key);
@@ -20,15 +24,17 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
+
   //Toggle Favorite button
   bool toggleIsFavorated(bool isFavorited) {
     return !isFavorited;
   }
-
   //Toggle add remove from cart
   bool toggleIsSelected(bool isSelected) {
     return !isSelected;
   }
+
+
   String name='';
   String? price;
   String? description;
@@ -40,7 +46,10 @@ class _DetailPageState extends State<DetailPage> {
   String? category;
   late SharedPreferences localStorage;
   late int loginId;
+  late SharedPreferences prefs;
 
+
+  List _favoritePlantItem=[];
   ViewCategoryApi viewCategoryApi = ViewCategoryApi();
 
   Future<void> _viewPro() async {
@@ -66,12 +75,21 @@ class _DetailPageState extends State<DetailPage> {
     });
   }
 
+  Future<void> fetchFavoriteItems() async {
+    List<Favorite> data = await ViewFavoriteItems().getFavoriteItems();
+    setState(() {
+      _favoritePlantItem = data.map((e) => e.item).toList();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     // Fetch the user details when the widget initializes
     _viewPro();
+    fetchFavoriteItems();
   }
+
   @override
   Widget build(BuildContext context) {
     Size sizes = MediaQuery.of(context).size;
@@ -118,21 +136,17 @@ class _DetailPageState extends State<DetailPage> {
                       color: Constants.primaryColor.withOpacity(.15),
                     ),
                     child: IconButton(
-                        onPressed: () {
-                          FavoriteItemAPI.FavoriteItem(context: context, productId: widget.plantId);
-                          /*setState(() {
-                            *//* bool isFavorited = toggleIsFavorated(
-                                _plantList[widget.plantId].isFavorated);
-                            _plantList[widget.plantId].isFavorated =
-                                isFavorited;*//*
-                          });*/
+                        onPressed: () async{
+                          _favoritePlantItem.contains(widget.plantId) ? await DeleteFavoriteItemInHomePage.deleteFavoriteItemInHomePage(context, widget.plantId) :
+                          await FavoriteItemAPI.FavoriteItem(context: context, productId: widget.plantId);
+                          await fetchFavoriteItems();
+
+                         // FavoriteItemAPI.FavoriteItem(context: context, productId: widget.plantId);
                         },
-                        icon: Icon(
-                          _plantList[widget.plantId] == true?
-                          Icons.favorite:
-                          Icons.favorite_border,
-                          color: Constants.primaryColor,
-                        )),
+                        icon:  _favoritePlantItem.contains(widget.plantId) ?
+                        Icon(Icons.favorite,color: Colors.white,size: 30,) :
+                        Icon(Icons.favorite_outline,color: Colors.white,size: 30,)
+                    ),
                   ),
                 ),
               ],

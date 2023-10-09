@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/constants.dart';
 import 'package:flutter_onboarding/models/favorite.dart';
 import 'package:flutter_onboarding/models/product.dart';
+import 'package:flutter_onboarding/services/deleteFavItemInHome.dart';
+import 'package:flutter_onboarding/services/favoriteItemService.dart';
 import 'package:flutter_onboarding/services/viewFavItem.dart';
 import 'package:flutter_onboarding/services/viewUserPlant.dart';
 import 'package:flutter_onboarding/ui/screens/detail_page.dart';
@@ -177,20 +179,15 @@ late int plantid;
                                   height: 50,
                                   width: 50,
                                   child: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                       /* bool isFavorited = toggleIsFavorated(
-                                            _plantList[index].isFavorated);
-                                        _plantList[index].isFavorated = isFavorited;*/
-                                      }
-                                      );
+                                    onPressed: () async{
+                                      _favoritePlantItem.contains(_plantList[index].id!.toInt())  ? await DeleteFavoriteItemInHomePage.deleteFavoriteItemInHomePage(context,_plantList[index].id!.toInt()) :
+                                      await  FavoriteItemAPI.FavoriteItem(context: context,productId: _plantList[index].id!.toInt());
+                                      await fetchFavoriteItems();
                                     },
-                                    icon: Icon(
-                                      //_plantList[index].isFavorated == true ?
-                                     // Icons.favorite:
-                                      Icons.favorite_border,
-                                      color: Constants.primaryColor,
-                                    ),
+                                    icon:
+                                    _favoritePlantItem.contains(_plantList[index].id) ?
+                                    Icon(Icons.favorite,color: Colors.red,) :
+                                    Icon(Icons.favorite_outline),
                                     iconSize: 30,
                                   ),
                                   decoration: BoxDecoration(

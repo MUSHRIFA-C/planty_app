@@ -122,7 +122,7 @@ class AddProductAPIView(GenericAPIView):
         images = request.data.get('images')
         ptrating = request.data.get('ptrating')
         category = request.data.get('category')
-        
+        expdate=request.POST.get('expdate')
 
 
         serializer = self.serializer_class(data= {'name': plantname, 'price': ptprice, 'description': ptdescription, 'size': ptsize, 'humidity': pthumidity, 'temparature': pttemp , 'rating': ptrating , 'image': images , 'category': category })

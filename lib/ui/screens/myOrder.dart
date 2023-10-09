@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/const/api_constants.dart';
 import 'package:flutter_onboarding/constants.dart';
 import 'package:flutter_onboarding/models/OrderItems.dart';
+import 'package:flutter_onboarding/models/orderAddress.dart';
 import 'package:flutter_onboarding/models/product.dart';
 import 'package:flutter_onboarding/services/viewOrders.dart';
 import 'package:flutter_onboarding/ui/screens/detail_page.dart';
@@ -17,10 +18,9 @@ class MyOrder extends StatefulWidget {
 class _MyOrderState extends State<MyOrder> {
 
   List<Data> _orderItems=[];
-
   List<DetailData> _plantList =[];
+  List<Data> _orderitem = [];
 
-  List<Data> filterdlist = [];
   TextEditingController breedController=TextEditingController();
 
   Future<void> fetchOrderItems() async {
@@ -29,7 +29,7 @@ class _MyOrderState extends State<MyOrder> {
 
     setState(() {
       _orderItems = data;
-      filterdlist = _orderItems;
+      _orderitem = _orderItems;
     });
 
     //getSearch();
@@ -76,7 +76,7 @@ class _MyOrderState extends State<MyOrder> {
               color: Colors.white
           ),),
         ),
-        body: filterdlist.isNotEmpty ? CustomScrollView(
+        body: _orderitem.isNotEmpty ? CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
               forceElevated: true,
@@ -124,12 +124,16 @@ class _MyOrderState extends State<MyOrder> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Image.network(APIConstants.url+filterdlist[index].image.toString(),
-                                width: 85,height: 85,),
+                              Image(image: AssetImage("Server/Plant_App${_orderitem[index].image}"),
+                                  width: 85,height: 85,
+                              ),
+                             /* Image.network(APIConstants.url+_orderitem[index].image.toString(),
+                                width: 85,height: 85,),*/
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Delivery with in ${filterdlist[index].expday.toString()} days',style: TextStyle(fontSize: 17,color: Colors.black,fontWeight: FontWeight.w500),maxLines: 2,),
+                                  Text('Delivery with in ${_orderitem[index].expday.toString()} days',
+                                    style: TextStyle(fontSize: 17,color: Colors.black,fontWeight: FontWeight.w500),maxLines: 2,),
                                   const SizedBox(height: 8,),
                                  // Text(filterdlist[index].breed.toString(),style: TextStyle(fontSize: 16,color: Colors.grey.shade600)),
                                   const SizedBox(height: 8,),
@@ -137,7 +141,7 @@ class _MyOrderState extends State<MyOrder> {
                                       constraints: BoxConstraints(
                                         maxWidth: itemWidth ,
                                       ),
-                                      child: Text(filterdlist[index].productName.toString(),style:
+                                      child: Text(_orderitem[index].productName.toString(),style:
                                       const TextStyle(fontSize: 14,color: Colors.grey),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
@@ -153,7 +157,7 @@ class _MyOrderState extends State<MyOrder> {
                     ),
                   );
                 },
-                childCount: filterdlist.length,
+                childCount: _orderitem.length,
               ),
             )
           ],

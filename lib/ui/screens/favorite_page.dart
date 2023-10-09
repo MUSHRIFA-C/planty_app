@@ -20,7 +20,6 @@ class _FavoritePageState extends State<FavoritePage> {
 
   Future<void> fetchFavoriteItems() async {
     List<Favorite> data = await ViewFavoriteItems().getFavoriteItems();
-
     setState(() {
       _favoriteItem = data;
     });
@@ -40,7 +39,7 @@ class _FavoritePageState extends State<FavoritePage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: _favoriteItem.isEmpty
+      body: _favoriteItem.isNotEmpty
           ? Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

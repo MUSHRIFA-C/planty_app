@@ -226,10 +226,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         SizedBox(height: 65,),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
                               height: 50,
-                              margin: EdgeInsets.symmetric(horizontal: 100),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10,),
                                   color: Constants.primaryColor,
@@ -255,35 +255,34 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
 
                             ),
-                          ],
-                        ),
-                        SizedBox(width: 10,),
-                        Container(
-                          height: 50,
-                          margin: EdgeInsets.symmetric(horizontal: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.teal.shade800,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade400,
-                                blurRadius: 2,
-                                offset: Offset(4, 4),
-                                spreadRadius: 1,
+                            Container(
+                              height: 50,
+                              margin: EdgeInsets.symmetric(horizontal: 10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Constants.primaryColor,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.shade400,
+                                    blurRadius: 2,
+                                    offset: Offset(4, 4),
+                                    spreadRadius: 1,
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          child: TextButton(
-                            child: Text(
-                              'Logout',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
+                              child: TextButton(
+                                child: Text(
+                                  'Logout',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                onPressed: logout,
                               ),
                             ),
-                            onPressed: logout,
-                          ),
+                          ],
                         ),
                       ],
                     ),

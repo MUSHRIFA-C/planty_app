@@ -86,7 +86,7 @@ class PlantWidget extends StatelessWidget {
                 color: Constants.primaryColor,
               ),
             ),
-          )
+          ),
         ],
       ),
     );
