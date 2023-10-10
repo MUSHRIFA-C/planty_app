@@ -1,5 +1,5 @@
 class APIConstants{
-  static const url="https://7f4d-117-201-198-73.ngrok-free.app";
+  static const url="https://ffa0-117-196-62-155.ngrok-free.app";
   static const login="/api/LoginAPIView";
   static const register="/api/UserRegisterAPIView";
   static const viewuser = "/api/ViewAllUserAPIView";
@@ -35,6 +35,8 @@ class APIConstants{
   static const deleteFavoriteItem='/api/deleteFavoriteItem/';
   static const deleteFavoriteItemInHomePage = '/api/deleteFavoriteItemInHomePage/';
 
+  static const searchItem='/api/item-search';
+  static const searchOrderItem='/api/searchOrderItem/';
 
 
   

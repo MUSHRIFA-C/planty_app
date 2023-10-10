@@ -25,16 +25,6 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
 
-  //Toggle Favorite button
-  bool toggleIsFavorated(bool isFavorited) {
-    return !isFavorited;
-  }
-  //Toggle add remove from cart
-  bool toggleIsSelected(bool isSelected) {
-    return !isSelected;
-  }
-
-
   String name='';
   String? price;
   String? description;
@@ -44,10 +34,10 @@ class _DetailPageState extends State<DetailPage> {
   String? rating;
   String? image;
   String? category;
+
   late SharedPreferences localStorage;
   late int loginId;
   late SharedPreferences prefs;
-
 
   List _favoritePlantItem=[];
   ViewCategoryApi viewCategoryApi = ViewCategoryApi();
@@ -144,8 +134,8 @@ class _DetailPageState extends State<DetailPage> {
                          // FavoriteItemAPI.FavoriteItem(context: context, productId: widget.plantId);
                         },
                         icon:  _favoritePlantItem.contains(widget.plantId) ?
-                        Icon(Icons.favorite,color: Colors.white,size: 30,) :
-                        Icon(Icons.favorite_outline,color: Colors.white,size: 30,)
+                        Icon(Icons.favorite,color: Constants.primaryColor) :
+                        Icon(Icons.favorite_outline,size: 30,)
                     ),
                   ),
                 ),

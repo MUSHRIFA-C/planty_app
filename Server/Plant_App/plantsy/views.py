@@ -9,6 +9,7 @@ from django.db.models import Sum
 
 from rest_framework import generics
 from rest_framework import filters
+from django.db.models import Q
 
 
          # Create your views here.
@@ -608,6 +609,28 @@ class Delete_FavoriteItemInHomePageAPIView(GenericAPIView):
             return Response({'message': 'Fav Item deleted successfully', 'success': True}, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'Favorite item not found', 'success': False}, status=status.HTTP_404_NOT_FOUND)
+
+                  ##search##
+
+class ItemSearchAPIView(GenericAPIView):
+    def post(self, request):
+        search = request.data.get('search')
+        data = product.objects.filter(Q(name__iexact=search) | Q(name__icontains=search)).values()
+        serialized_data = list(data)
+        for obj in serialized_data:
+            obj['image'] = settings.MEDIA_URL + str(obj['image'])       
+        return Response({'data': serialized_data, 'message': 'Search data', 'success': True}, status=status.HTTP_200_OK)
+            
+            #searchorder
+class OrderItemSearchAPIView(GenericAPIView):
+    def post(self, request, userId):
+        search=request.data.get('search')
+        data=Order.objects.filter(product_name=search,user=userId).values()
+        serialized_data=list(data)
+        print(serialized_data)
+        for obj in serialized_data:
+            obj['image'] =settings.MEDIA_URL+str(obj['image']) 
+        return Response({'data':data,'message':'Search data','success':True},status=status.HTTP_200_OK)
 
 
 

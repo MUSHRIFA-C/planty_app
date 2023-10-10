@@ -113,7 +113,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: CircleAvatar(
                     radius: 40,
                     backgroundColor: Constants.primaryColor,
-                    child: Text(name,style: TextStyle(
+                    child: Text(name[0],style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 41,
                         color: Colors.white

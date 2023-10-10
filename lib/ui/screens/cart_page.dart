@@ -195,7 +195,7 @@ var body;
                                             child: Container(
                                               padding: EdgeInsets.all(10),
                                               decoration: BoxDecoration(
-                                                  color: Colors.grey.shade300,
+                                                  color: Constants.primaryColor,
                                                   borderRadius:
                                                   BorderRadius.circular(15)),
                                               child: Image(

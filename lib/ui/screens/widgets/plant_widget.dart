@@ -71,6 +71,13 @@ class PlantWidget extends StatelessWidget {
                         color: Constants.blackColor,
                       ),
                     ),
+                    Text(
+                      plantList[index].category ?? '',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Constants.blackColor,
+                      ),
+                    ),
                   ],
                 ),
               ),

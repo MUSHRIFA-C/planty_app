@@ -31,13 +31,16 @@ urlpatterns = [
      path("viewOrderAddress/<int:id>",views.ViewOrderAddressAPIView.as_view(),name="viewOrderAddress"),
      path("viewSingleOrderAddress/<int:id>",views.ViewSingleOrderAddressAPIView.as_view(),name="viewSingleOrderAddress"),
      path("updateOrderAddress/<int:id>",views.UpdateOrderAddressSerializerAPIView.as_view(),name="updateOrderAddress"),
+
+                                    # search 
+     path('item-search',views.ItemSearchAPIView.as_view(), name='item-search'),
+     path("searchOrderItem/<int:userId>",views.OrderItemSearchAPIView.as_view(),name="searchOrderItem"),                        
      
                                 ###profile####
      path("viewuserProfile/<int:id>",views.ProfileViewAPIView.as_view(),name="viewuserProfile"),
      path("updateuserProfile/<int:id>",views.SingleUserUpdateProfileSerializerAPIView.as_view(),name="updateuserProfile"),
 
                                ###Favorite####
-
      path("favoriteItem",views.FavoriteItemAPIView.as_view(),name="favoriteItem"),
      path("viewFavoriteItem/<int:id>",views.ViewFavoriteItemsAPIView.as_view(),name="viewFavoriteItem"),
      path("deleteFavoriteItem/<int:id>",views.Delete_FavoriteItemAPIView.as_view(),name="deleteFavoriteItem"),

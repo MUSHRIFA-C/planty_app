@@ -1,12 +1,16 @@
+
 import 'package:flutter/material.dart';
+import 'package:flutter_onboarding/const/api_constants.dart';
 import 'package:flutter_onboarding/constants.dart';
 import 'package:flutter_onboarding/models/favorite.dart';
+import 'package:flutter_onboarding/services/deleteFavoriteItem.dart';
 import 'package:flutter_onboarding/services/viewFavItem.dart';
-import 'package:flutter_onboarding/ui/screens/widgets/plant_widget.dart';
-
+import 'package:flutter_onboarding/ui/screens/detail_page.dart';
+import 'package:flutter_onboarding/ui/screens/home_page.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class FavoritePage extends StatefulWidget {
-  const FavoritePage({Key? key,}) : super(key: key);
+  const FavoritePage({Key? key}) : super(key: key);
 
   @override
   State<FavoritePage> createState() => _FavoritePageState();
@@ -15,11 +19,10 @@ class FavoritePage extends StatefulWidget {
 class _FavoritePageState extends State<FavoritePage> {
 
   List<Favorite> _favoriteItem=[];
-  var favoriteItem;
-  var _plantList;
 
   Future<void> fetchFavoriteItems() async {
     List<Favorite> data = await ViewFavoriteItems().getFavoriteItems();
+
     setState(() {
       _favoriteItem = data;
     });
@@ -34,51 +37,137 @@ class _FavoritePageState extends State<FavoritePage> {
     fetchFavoriteItems();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+
+    var size = MediaQuery.of(context).size;
+    final double itemWidth = size.width / 1.8;
+
     return Scaffold(
-      body: _favoriteItem.isNotEmpty
-          ? Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 100,
-              child: Image.asset('assets/images/favorited.png'),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Your favorited Plants',
-              style: TextStyle(
-                color: Constants.primaryColor,
-                fontWeight: FontWeight.w300,
-                fontSize: 18,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 15,left: 10,right: 10,bottom: 10),
+                child: Row(
+                  children: [
+                    IconButton(
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+                          },
+                        icon: Icon(Icons.arrow_back)
+                    ),
+                    Text('Favorite List',style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 22,
+                      color: Colors.grey[800],
+                    ),),
+                  ],
+                ),
               ),
-            ),
-          ],
+              _favoriteItem.isNotEmpty ? ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: _favoriteItem.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                          top: 5, left: 8, right: 8),
+                      child: InkWell(
+                        onTap: (){
+                          if(_favoriteItem[index].item==null)
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailPage(plantId: _favoriteItem[index].id!)));
+                        },
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Stack(
+                                    children: [
+                                      SizedBox(
+                                        width: 120,
+                                        child: AspectRatio(
+                                          aspectRatio: 0.88,
+                                          child: Container(
+                                            padding: EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                                color: Constants.primaryColor,
+                                                borderRadius:
+                                                BorderRadius.circular(15)),
+                                            child: Image(image: AssetImage("Server/Plant_App${_favoriteItem[index].image}"),
+                                              width: 85,height: 85,
+                                            ),
+                                            //Image.network(APIConstants.url + _favoriteItem[index].image.toString()),
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        right: 1,
+                                        child: IconButton(
+                                            onPressed: () async{
+                                              if(_favoriteItem[index].favStatus! == "1") {
+
+                                                await  DeleteFavoriteItemAPI.deleteFavoriteItems(context,_favoriteItem[index].id!);
+                                                await fetchFavoriteItems();
+
+                                              }
+                                            },
+                                            icon: _favoriteItem[index].favStatus! == "1" ?
+                                            Icon(Icons.favorite,color: Colors.red,) :
+                                            Icon(Icons.favorite_outline)
+                                        ),
+                                      ),
+                                    ]),
+                                const SizedBox(
+                                  width: 18,
+                                ),
+                                Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      constraints: BoxConstraints(
+                                        maxWidth: itemWidth ,
+                                      ),
+                                      child: Text(_favoriteItem[index].itemName.toString(),
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.black),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text.rich(TextSpan(
+                                        text: "₨. ${_favoriteItem[index].price}",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.grey)))
+                                  ],
+                                ),
+                                const Spacer(),
+                                // IconButton(onPressed: (){},
+                                //     icon: Icon(Icons.delete)
+                                // )
+                              ],
+                            ),
+                            Divider(
+                              thickness: 1,
+                              color: Colors.grey.shade200,
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  }) : Center(child: CircularProgressIndicator(),)
+            ],
+          ),
         ),
-      )
-          : Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 30),
-        height: size.height * .5,
-        child: ListView.builder(
-            itemCount: _favoriteItem.length,
-            scrollDirection: Axis.vertical,
-            physics: const BouncingScrollPhysics(),
-            itemBuilder: (BuildContext context, int index) {
-              return PlantWidget(
-                index: index,
-                plantList: _plantList,
-                favoriteItem: _favoriteItem,
-              );
-            }),
       ),
     );
   }
 }
-

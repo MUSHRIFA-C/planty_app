@@ -24,7 +24,6 @@ class _HomePageState extends State<HomePage> {
   List<Favorite> _favoriteItem = [];
   List _favoritePlantItem=[];
 
-
   Future<void> _loadPlantData() async {
     try {
       final plantData = await ViewUserplant.getPlants();
@@ -45,6 +44,7 @@ class _HomePageState extends State<HomePage> {
   }
 
 late int plantid;
+
   @override
   void initState() {
     super.initState();
@@ -57,18 +57,13 @@ late int plantid;
     Size size = MediaQuery.of(context).size;
 
     //Plants category
-    List<String> _plantTypes = [
+   List<String> _plantTypes = [
       'Recommended',
       'Indoor',
       'Outdoor',
       'Garden',
       'Supplement',
     ];
-
-    //Toggle Favorite button
-    bool toggleIsFavorated(bool isFavorited) {
-      return !isFavorited;
-    }
 
     return Scaffold(
         body: SingleChildScrollView(
@@ -183,10 +178,11 @@ late int plantid;
                                       _favoritePlantItem.contains(_plantList[index].id!.toInt())  ? await DeleteFavoriteItemInHomePage.deleteFavoriteItemInHomePage(context,_plantList[index].id!.toInt()) :
                                       await  FavoriteItemAPI.FavoriteItem(context: context,productId: _plantList[index].id!.toInt());
                                       await fetchFavoriteItems();
+                                      print(_favoritePlantItem.contains(_plantList[index].id));
                                     },
                                     icon:
                                     _favoritePlantItem.contains(_plantList[index].id) ?
-                                    Icon(Icons.favorite,color: Colors.red,) :
+                                    Icon(Icons.favorite,color: Constants.primaryColor,) :
                                     Icon(Icons.favorite_outline),
                                     iconSize: 30,
                                   ),

@@ -89,8 +89,6 @@ class _ProductupdateState extends State<Productupdate> {
       temperature = body['data']['temperature'];
 
 
-
-
       nameController.text = name;
       descriptionController.text=description;
       sizeController.text=size;
@@ -158,7 +156,6 @@ class _ProductupdateState extends State<Productupdate> {
       });
     }
   }
-
 
 
   @override
