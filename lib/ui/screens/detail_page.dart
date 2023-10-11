@@ -2,7 +2,10 @@ import 'dart:convert';
 import 'package:flutter_onboarding/models/favorite.dart';
 import 'package:flutter_onboarding/services/deleteFavItemInHome.dart';
 import 'package:flutter_onboarding/services/favoriteItemService.dart';
+import 'package:flutter_onboarding/services/ratePlants.dart';
 import 'package:flutter_onboarding/services/viewFavItem.dart';
+import 'package:flutter_onboarding/services/viewUserPlant.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart'as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/const/api_constants.dart';
@@ -42,6 +45,8 @@ class _DetailPageState extends State<DetailPage> {
   List _favoritePlantItem=[];
   ViewCategoryApi viewCategoryApi = ViewCategoryApi();
 
+  DetailData ? plantDetails;
+
   Future<void> _viewPro() async {
     localStorage = await SharedPreferences.getInstance();
     loginId = (localStorage.getInt("login_id") ?? 0);
@@ -72,12 +77,26 @@ class _DetailPageState extends State<DetailPage> {
     });
   }
 
+  Future<DetailData?> fetchPlantDetails(plantId) async {
+    try {
+      final details = await ViewUserplant.getPlants();
+      plantDetails = details as DetailData?;
+      setState(() {
+        print(plantDetails);
+      });
+    } catch (e) {
+      print('Failed to fetch pet details: $e');
+      return null;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     // Fetch the user details when the widget initializes
     _viewPro();
     fetchFavoriteItems();
+    fetchPlantDetails(widget.plantId);
   }
 
   @override
@@ -240,25 +259,34 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                       Row(
                         children: [
-                          Text(
-                            rating==null?'0':rating!,
-                            style: TextStyle(
-                              fontSize: 30.0,
-                              color: Constants.primaryColor,
-                            ),
+                          RatingBar.builder(
+                              initialRating: (plantDetails?.rating ?? 0).toDouble(),
+                              minRating: 1,
+                              direction: Axis.horizontal,
+                              allowHalfRating: true,
+                              itemCount: 5,
+                              itemSize: 25,
+                              itemBuilder: (context, _){
+                                return Icon(Icons.star,
+                                  size: 30.0,
+                                  color: Constants.primaryColor);
+                              },
+                              onRatingUpdate:(rating) async {
+                                if (plantDetails != null) {
+                                  await RatePlantAPI.ratePlants(
+                                      context, widget.plantId, rating);
+                                  await fetchPlantDetails(widget.plantId);
+                                  print(rating);
+                                }
+                              }
                           ),
-                          Icon(
-                            Icons.star,
-                            size: 30.0,
-                            color: Constants.primaryColor,
-                          ),
+                          SizedBox(width: 5,),
+                          Text('(${plantDetails!.ratingCount ?? 0})')
                         ],
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
+                  const SizedBox(height: 5.0,),
                   Expanded(
                     child: Text(
                       description.toString(),

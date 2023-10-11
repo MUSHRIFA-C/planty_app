@@ -31,6 +31,7 @@ class _HomePageState extends State<HomePage> {
     try {
       final plantData = await ViewUserplant.getPlants();
       setState(() {
+        //_plantList = (plantData.detaildata as List<DetailData>?) ?? [];
         _plantList = plantData.detaildata ?? [];
       });
     } catch (e) {
@@ -171,6 +172,7 @@ late int plantid;
                               PageTransition(
                                   child: DetailPage(
                                     plantId:_plantList[index].id!,
+
                                   ),
                                   type: PageTransitionType.bottomToTop));
                         },
