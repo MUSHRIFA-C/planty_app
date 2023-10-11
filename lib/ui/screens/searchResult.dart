@@ -36,7 +36,7 @@ class SearchResult extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image(image: AssetImage('images/paper.png',),width: 70,height: 70,),
+                Image(image: AssetImage('assets/images/paper.png',),width: 70,height: 70,),
                 SizedBox(height: 5,),
                 Text('No data Found',style: TextStyle(
                     color: Colors.black,

@@ -16,9 +16,11 @@ class SearchItem{
     try {
       var response = await Apiservice().authData(data,APIConstants.searchItem);
       var body = json.decode(response.body);
+      print("search body$body");
       if (body['success'] == true) {
         List _data=body['data'];
         var items=_data.map((e) => DetailData.fromJson(e)).toList();
+
         Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchResult(items:items)));
 
       }

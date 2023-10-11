@@ -4,6 +4,7 @@ import 'package:flutter_onboarding/models/favorite.dart';
 import 'package:flutter_onboarding/models/product.dart';
 import 'package:flutter_onboarding/services/deleteFavItemInHome.dart';
 import 'package:flutter_onboarding/services/favoriteItemService.dart';
+import 'package:flutter_onboarding/services/searchitem.dart';
 import 'package:flutter_onboarding/services/viewFavItem.dart';
 import 'package:flutter_onboarding/services/viewUserPlant.dart';
 import 'package:flutter_onboarding/ui/screens/detail_page.dart';
@@ -23,6 +24,8 @@ class _HomePageState extends State<HomePage> {
   List<DetailData> _plantList =[];
   List<Favorite> _favoriteItem = [];
   List _favoritePlantItem=[];
+  String name= '' ;
+  bool isLoaded=false;
 
   Future<void> _loadPlantData() async {
     try {
@@ -48,7 +51,7 @@ late int plantid;
   @override
   void initState() {
     super.initState();
-    _loadPlantData();// Load plant data when the page initializes
+    _loadPlantData();
     fetchFavoriteItems();
   }
 
@@ -88,9 +91,18 @@ late int plantid;
                             Icons.search,
                             color: Colors.black54.withOpacity(.6),
                           ),
-                          const Expanded(
-                              child: TextField(
+                           Expanded(
+                              child: TextFormField(
                                 showCursor: false,
+                                onFieldSubmitted: (String text){
+                                  setState(() {
+                                    name=text;
+                                    SearchItem.searchItems(context, name.trim());
+                                    setState(() {
+                                      isLoaded=false;
+                                    });
+                                  });
+                                },
                                 decoration: InputDecoration(
                                   hintText: 'Search Plant',
                                   border: InputBorder.none,

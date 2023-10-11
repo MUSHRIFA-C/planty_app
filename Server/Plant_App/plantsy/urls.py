@@ -12,9 +12,9 @@ urlpatterns = [
      path('ViewAllUserAPIView',views.ViewAllUserAPIView.as_view(), name='ViewAllUserAPIView'),
      path("addtocart",views.AddtoCartAPIView.as_view(),name="addtocart"),
 
-
      path("ViewCategoryAPIView",views.ViewCategoryAPIView.as_view(),name='ViewCategoryAPIView'),
 
+     path("ratingplant/<int:id>",views.RatingPlantAPIView.as_view(),name="ratingplant"),
 
                  ######## view cart item in a perticular user ############
 

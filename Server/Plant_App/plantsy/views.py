@@ -632,6 +632,38 @@ class OrderItemSearchAPIView(GenericAPIView):
             obj['image'] =settings.MEDIA_URL+str(obj['image']) 
         return Response({'data':data,'message':'Search data','success':True},status=status.HTTP_200_OK)
 
+class RatingPlantAPIView(GenericAPIView):
+    def put(self, request, id):
+        try:
+            ratings = product.objects.get(pk=id)
+        except product.DoesNotExist:
+            return Response({'message': 'Plant not found', 'success': False}, status=status.HTTP_404_NOT_FOUND)
+
+        rate = request.data.get('rate')
+        if rate is None:
+            return Response({'message': 'Rate is not provided', 'success': False}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            rate = float(rate)
+        except ValueError:
+            return Response({'message': 'Invalid rate format', 'success': False}, status=status.HTTP_400_BAD_REQUEST)
+
+        count = ratings.rating_count or 0 
+        count += 1  
+        ratings.rating_count = count
+
+        print("Count =", count)
+
+        if ratings.rating is None:
+            ratings.rating = 0.0
+        ratings.rating = (rate + ratings.rating * (count - 1)) / count
+        ratings.save()
+
+        serialized_data = productserializer(ratings, context={'request': request}).data
+        base_url = request.build_absolute_uri('/')[:-1]
+        serialized_data['image'] = str(serialized_data['image']).replace(base_url, '')
+        
+        return Response({'data': serialized_data, 'message': 'Thank you for your rating', 'success': True}, status=status.HTTP_200_OK)
+
 
 
 

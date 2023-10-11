@@ -21,6 +21,8 @@ class product(models.Model):
     image = models.ImageField(upload_to = 'images/', null=True)
     category=models.CharField(max_length =50, null= True)
     expdate=models.CharField(max_length=200,default='10')
+    rating=models.FloatField(max_length=100,null=True,default=0.0)
+    rating_count=models.IntegerField(default=0,null=True)
     
     def __str__(self):
         return self.name

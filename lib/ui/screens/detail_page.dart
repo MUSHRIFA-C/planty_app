@@ -122,8 +122,8 @@ class _DetailPageState extends State<DetailPage> {
                     height: 40,
                     width: 40,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                      color: Constants.primaryColor.withOpacity(.15),
+                      borderRadius: BorderRadius.circular(50),
+                      color: Colors.white,
                     ),
                     child: IconButton(
                         onPressed: () async{
