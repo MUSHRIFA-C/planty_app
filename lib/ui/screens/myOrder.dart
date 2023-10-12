@@ -127,8 +127,7 @@ class _MyOrderState extends State<MyOrder> {
                               Image(image: AssetImage("Server/Plant_App${filterdlist[index].image}"),
                                   width: 85,height: 85,
                               ),
-                             /* Image.network(APIConstants.url+_orderitem[index].image.toString(),
-                                width: 85,height: 85,),*/
+                             /* Image.network(APIConstants.url+_orderitem[index].image.toString()),*/
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [

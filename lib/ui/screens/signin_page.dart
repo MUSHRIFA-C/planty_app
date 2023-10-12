@@ -1,11 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/constants.dart';
 import 'package:flutter_onboarding/models/login.dart';
 import 'package:flutter_onboarding/services/loginservice.dart';
 import 'package:flutter_onboarding/ui/root_page.dart';
-
 import 'package:http/http.dart'as http;
 import 'package:flutter_onboarding/ui/screens/forgot_password.dart';
 import 'package:flutter_onboarding/ui/screens/signup_page.dart';

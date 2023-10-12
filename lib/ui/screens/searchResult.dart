@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/const/api_constants.dart';
+import 'package:flutter_onboarding/constants.dart';
 import 'package:flutter_onboarding/models/product.dart';
 import 'package:flutter_onboarding/ui/screens/detail_page.dart';
 
@@ -11,6 +12,8 @@ class SearchResult extends StatelessWidget {
   SearchResult({
     required this.items
   });
+
+ // List<DetailData> _plantList =[];
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +79,9 @@ class SearchResult extends StatelessWidget {
                                   Container(
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
-                                          image: NetworkImage(APIConstants.url+items[index].image.toString())),
+                                          image: AssetImage("Server/Plant_App${items[index].image}"),
+                                        // NetworkImage(APIConstants.url+items[index].image.toString())
+                                      ),
                                       color: Colors.grey.shade100,
                                     ),
                                   ),
@@ -84,7 +89,8 @@ class SearchResult extends StatelessWidget {
                                     right: 1,
                                     child: IconButton(
                                       onPressed: (){},
-                                      icon: const Icon(Icons.favorite),
+                                      icon: Icon(Icons.favorite,
+                                      color: Constants.primaryColor),
                                     ),
                                   ),
                                   Positioned(
