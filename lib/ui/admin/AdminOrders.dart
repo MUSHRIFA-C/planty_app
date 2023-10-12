@@ -1,50 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/constants.dart';
 import 'package:flutter_onboarding/models/OrderItems.dart';
+import 'package:flutter_onboarding/services/viewOrderAdmin.dart';
 import 'package:flutter_onboarding/services/viewOrders.dart';
+import 'package:flutter_onboarding/ui/admin/home_screen.dart';
 import 'package:flutter_onboarding/ui/screens/detail_page.dart';
 import 'package:flutter_onboarding/ui/screens/home_page.dart';
 
 
-class MyOrder extends StatefulWidget {
-  const MyOrder({Key? key}) : super(key: key);
+class ViewOrder extends StatefulWidget {
+  const ViewOrder({Key? key}) : super(key: key);
 
   @override
-  State<MyOrder> createState() => _MyOrderState();
+  State<ViewOrder> createState() => _ViewOrderState();
 }
 
-class _MyOrderState extends State<MyOrder> {
+class _ViewOrderState extends State<ViewOrder> {
 
+  List<Data> orderItems=[];
   List<Data> _orderItems=[];
-  List<Data> filterdlist = [];
 
   TextEditingController productnameController=TextEditingController();
 
   Future<void> fetchOrderItems() async {
-    ViewOrderItems viewOrderItems = ViewOrderItems();
-    List<Data> data = await viewOrderItems.getOrderItems();
+    ViewAdminOrder adminOrder  = ViewAdminOrder();
+    List<Data> data = await adminOrder .getOrderItems();
 
     setState(() {
-      _orderItems = data;
-      filterdlist = _orderItems;
+      orderItems = data;
+      orderItems = _orderItems;
     });
 
-    getSearch();
-  }
-
-  getSearch(){
-    if(mounted){
-      productnameController.addListener(() {
-        setState(() {
-          filterdlist = _orderItems
-              .where((element) => element.productName!
-              .toLowerCase().contains(productnameController.text.toLowerCase())).toList();
-          if (filterdlist.isEmpty) {
-            filterdlist = [];
-          }
-        });
-      });
-    }
   }
 
   @override
@@ -65,17 +51,17 @@ class _MyOrderState extends State<MyOrder> {
           backgroundColor: Constants.primaryColor,
           leading: IconButton(
               onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
-                },
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>Homescreen()));
+              },
               icon: const Icon(Icons.arrow_back)
           ),
-          title: const Text('My Orders',style: TextStyle(
+          title: const Text('View Orders',style: TextStyle(
               fontWeight: FontWeight.w500,
               fontSize: 20,
               color: Colors.white
           ),),
         ),
-        body: filterdlist.isNotEmpty ? CustomScrollView(
+        body: orderItems.isNotEmpty ? CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
               forceElevated: true,
@@ -112,11 +98,7 @@ class _MyOrderState extends State<MyOrder> {
               delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                   return GestureDetector(
-                    onTap: (){
-                      print("---${filterdlist[index].id!}");
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailPage(
-                          plantId:filterdlist[index].id!)));
-                    },
+                    onTap: (){},
                     child: Column(
                       children: [
                         Padding(
@@ -124,24 +106,27 @@ class _MyOrderState extends State<MyOrder> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Image(image: AssetImage("Server/Plant_App${filterdlist[index].image}"),
-                                  width: 85,height: 85,
+                              Image(image: AssetImage("Server/Plant_App${orderItems[index].image}"),
+                                width: 85,height: 85,
                               ),
-                             /* Image.network(APIConstants.url+_orderitem[index].image.toString(),
-                                width: 85,height: 85,),*/
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Delivery with in ${filterdlist[index].expday.toString()} days',
-                                    style: TextStyle(fontSize: 17,color: Colors.black,fontWeight: FontWeight.w500),maxLines: 2,),
+                                  Text(orderItems[index].productName.toString(),
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500),maxLines: 2,),
+
                                   const SizedBox(height: 8,),
-                                  Text(filterdlist[index].productName.toString(),style: TextStyle(fontSize: 16,color: Colors.grey.shade600)),
+                                  Text(orderItems[index].totalPrice.toString(),
+                                      style: TextStyle(fontSize: 16,color: Colors.grey.shade600)),
                                   const SizedBox(height: 8,),
                                   Container(
                                       constraints: BoxConstraints(
                                         maxWidth: itemWidth ,
                                       ),
-                                      child: Text(filterdlist[index].productName.toString(),style:
+                                      child: Text(orderItems[index].productName.toString(),style:
                                       const TextStyle(fontSize: 14,color: Colors.grey),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
@@ -157,7 +142,7 @@ class _MyOrderState extends State<MyOrder> {
                     ),
                   );
                 },
-                childCount: filterdlist.length,
+                childCount: orderItems.length,
               ),
             )
           ],

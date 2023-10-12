@@ -3,6 +3,7 @@ import 'package:flutter_onboarding/const/api_constants.dart';
 import 'package:flutter_onboarding/constants.dart';
 import 'package:flutter_onboarding/models/product.dart';
 import 'package:flutter_onboarding/services/viewproduct.dart';
+import 'package:flutter_onboarding/ui/admin/home_screen.dart';
 import 'package:flutter_onboarding/ui/admin/new_product_screen.dart';
 import 'package:flutter_onboarding/ui/admin/productupdate.dart';
 
@@ -21,7 +22,10 @@ class _ProductviewState extends State<Productview> {
         backgroundColor: Constants.primaryColor,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Homescreen()),
+            );
           },
           icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.white),
         ),
@@ -68,10 +72,11 @@ class _ProductviewState extends State<Productview> {
                             leading: CircleAvatar(
                               radius: 50.0,
                               backgroundColor: Constants.primaryColor,
-                              backgroundImage: AssetImage("Server/Plant_App${snapshot.data!.detaildata![index].image!}")
+                              backgroundImage: AssetImage("Server/Plant_App${snapshot.data!.detaildata![index].image!}"),
+
                               /* NetworkImage(
                                 APIConstants.url + snapshot.data!.detaildata![index].image!,
-                              )*/,
+                              )*/
                             ),
                             title: Text(
                               snapshot.data!.detaildata![index].name!,

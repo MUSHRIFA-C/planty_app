@@ -63,8 +63,9 @@ class _SignInState extends State<SignIn> {
                 icon: Icons.lock,
                   decoration: InputDecoration(
                     suffixIcon: IconButton(
-                    icon: Icon(passwordVisible ? Icons.visibility_off
-                        : Icons.visibility,color: Colors.teal.shade800,),
+                    icon: Icon(passwordVisible ?
+                    Icons.visibility_off : Icons.visibility,
+                      color: Colors.teal.shade800,),
                     onPressed: () {
                       setState(
                             () {

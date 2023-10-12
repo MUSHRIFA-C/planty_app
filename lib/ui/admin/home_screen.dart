@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/constants.dart';
-import 'package:flutter_onboarding/ui/admin/complaint.dart';
-import 'package:flutter_onboarding/ui/admin/feedback.dart';
 import 'package:flutter_onboarding/ui/admin/new_product_screen.dart';
 import 'package:flutter_onboarding/ui/admin/notification.dart';
 import 'package:flutter_onboarding/ui/admin/orders_screen.dart';
-import 'package:flutter_onboarding/ui/admin/payment.dart';
 import 'package:flutter_onboarding/ui/admin/products_screen.dart';
+import 'package:flutter_onboarding/ui/admin/AdminOrders.dart';
 import 'package:flutter_onboarding/ui/admin/viewUser.dart';
 import 'package:flutter_onboarding/ui/screens/signin_page.dart';
 
@@ -83,7 +81,7 @@ class _HomescreenState extends State<Homescreen> {
                           builder: (context) => SignIn()));
 
 
-                      
+
                     }, icon: Icon(Icons.logout_outlined))
                 ],
               ),
@@ -127,28 +125,12 @@ class _HomescreenState extends State<Homescreen> {
                   ),
                   _buildFeatureCard(
                     context,
-                    'Payment',
-                    'assets/images/pay.png',
+                    'View Order',
+                    'assets/images/vieworder.jpg',
                         () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Apayment()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => ViewOrder()));
                     },
                   ),
-                  /*_buildFeatureCard(
-                    context,
-                    'Complaint',
-                    'images/events.jpeg',
-                        () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Acomplaint()));
-                    },
-                  ),*/
-                  /*_buildFeatureCard(
-                    context,
-                    'Feedback',
-                    'assets/images/feed.png',
-                        () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => FeedBack()));
-                    },
-                  ),*/
                 ],
               ),
             ],

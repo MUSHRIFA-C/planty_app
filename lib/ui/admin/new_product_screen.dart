@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/constants.dart';
-import 'package:flutter_onboarding/models/product.dart';
 import 'package:flutter_onboarding/services/addproductservice.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
+
+
 class Aaddproducts extends StatefulWidget {
   const Aaddproducts({Key? key}) : super(key: key);
 
