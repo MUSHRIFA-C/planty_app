@@ -34,7 +34,7 @@ class _DetailPageState extends State<DetailPage> {
   String? size;
   String? humidity;
   String? temparature;
-  String? rating;
+  double rating=0.0;
   String? image;
   String? category;
 
@@ -64,8 +64,10 @@ class _DetailPageState extends State<DetailPage> {
       humidity = body['data']['humidity'];
       temparature = body['data']['temperature'];
       category = body['data']['category'];
-      rating = body['data']['rating'];
+      rating = body['data']['rating']==null?0.0:body['data']['rating'];
       image = body['data']['image'];
+
+      print(rating);
 
     });
   }
@@ -260,7 +262,7 @@ class _DetailPageState extends State<DetailPage> {
                       Row(
                         children: [
                           RatingBar.builder(
-                              initialRating: (plantDetails?.rating ?? 0).toDouble(),
+                              initialRating: rating,
                               minRating: 1,
                               direction: Axis.horizontal,
                               allowHalfRating: true,
@@ -281,7 +283,7 @@ class _DetailPageState extends State<DetailPage> {
                               }
                           ),
                           SizedBox(width: 5,),
-                          Text('(${plantDetails!.ratingCount ?? 0})')
+                          Text(rating!.toString())
                         ],
                       ),
                     ],

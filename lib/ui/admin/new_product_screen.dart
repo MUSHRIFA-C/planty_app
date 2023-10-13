@@ -225,61 +225,6 @@ class _AaddproductsState extends State<Aaddproducts> {
 
 
             SizedBox(height: 20,),
-/*            FutureBuilder<List<cate>>(
-              future: viewcategories.getCategories(),
-              builder: (BuildContext context, AsyncSnapshot<List<ViewCategoryModel>> snapshot) {
-                if (snapshot.hasData) {
-                  List<ViewCategoryModel> categories = snapshot.data!;
-                  return SizedBox(
-                    width: 350,
-                    child: DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        disabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-                        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-                      ),
-                      hint: Text('Categories'),
-                      value: dropDownvalue,
-
-                      items: categories.map((category) {
-                        return DropdownMenuItem<String>(
-                          value: category.id.toString(),
-                          child: Text(
-                            '${category.name} ',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (type) {
-                        setState(() {
-
-                          dropDownvalue = type;
-                          print("dropdownvalue $dropDownvalue");
-                        });
-                      },
-                    ),
-                  );
-                }
-                return const Center(child: CircularProgressIndicator());
-              },
-            ),*/
-            /*DropdownButtonFormField<String>(
-              iconSize: 20,
-              decoration: const InputDecoration(hintText: 'Product Category'),
-              value: newProduct.data!.category,
-              items: categories.map((category) {
-                return DropdownMenuItem<String>(
-                  value: category,
-                  child: Text(category),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  newProduct.data!.category = value;
-                  dropDownvalue = newProduct.data!.category;
-                  print("dropDownvalue $dropDownvalue");
-                });
-              },
-            ),*/
             Card(
               child: SizedBox(
                 width: double.maxFinite,

@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_onboarding/const/api_constants.dart';
@@ -24,11 +23,18 @@ class Productupdate extends StatefulWidget {
 }
 
 class _ProductupdateState extends State<Productupdate> {
+
   List _loaddata=[];
+  List items=[
+    "Recommended",
+    "Garden",
+    "Outdoor",
+    "Indoor",
+  ];
+  String? dropDownvalue;
 
   _fetchData() async {
     final url = APIConstants.url+ APIConstants.viewproduct;
-
     var res = await http.get(Uri.parse(url));
     if (res.statusCode == 200) {
       var items = json.decode(res.body)['data'];
@@ -51,9 +57,10 @@ class _ProductupdateState extends State<Productupdate> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _fetchData();
+  //  _fetchData();
     _viewPro();
   }
+  late int id;
   String name='';
   String price='';
   String description='';
@@ -74,20 +81,21 @@ class _ProductupdateState extends State<Productupdate> {
 
 
   int currentTab = 2;
+
   Future<void> _viewPro() async {
     int id=widget.id;
-
     var res = await Apiservice().getData(APIConstants.viewsingleproduct + id.toString());
     var body = json.decode(res.body);
     print(body);
+
     setState(() {
       name = body['data']['name'];
       description = body['data']['description'];
-      price = body['data']['price'];
+      price = "${body['data']['price']} ₹"==null?'0' : "${body['data']['price']} ₹";
       size = body['data']['size'];
-      humidity = body['data']['humidity'];
-      temperature = body['data']['temperature'];
-
+      humidity = "${body['data']['humidity']} %"==null?'0' : "${body['data']['humidity']} %";
+      temperature = "${body['data']['temparature']}°C"==null?'0':"${body['data']['temparature']}°C";
+      print("tem$temperature");
 
       nameController.text = name;
       descriptionController.text=description;
@@ -96,25 +104,18 @@ class _ProductupdateState extends State<Productupdate> {
       humidityController.text=humidity;
       temperatureController.text=temperature;
 
-
     });
   }
 
-
-  // Initial Selected Value
   Future<void> _update(String name, String price,
       String size, String description,
       /*String rating,*/ String humidity,
-      String temperature, String category,File? imageFile) async {
+      String temperature, String category,/*File? imageFile*/) async {
     int id=widget.id;
     prefs = await SharedPreferences.getInstance();
+    final urls = APIConstants.url + APIConstants.updateproduct + widget.id.toString();
 
-    final urls = APIConstants.url + APIConstants.updateproduct + id.toString();
-    /*var uri = Uri.parse(APIConstants().url+'/api/Update_productAPIView/'+id.toString());*/ // Replace with your API endpoint
-
-    // var http;
-    var request = await http.MultipartRequest('POST', Uri.parse(urls));
-
+    var request = await http.MultipartRequest('PUT', Uri.parse(urls));
     request.fields["plantname"] = name;
     request.fields["ptprice"] = price;
     request.fields["ptdescription"] = description;
@@ -125,6 +126,7 @@ class _ProductupdateState extends State<Productupdate> {
     request.fields["category"] = category;
 
     print(request.fields);
+
     final response = await request.send();
     if (response.statusCode == 200) {
       print('Product Updated successfully');
@@ -160,7 +162,6 @@ class _ProductupdateState extends State<Productupdate> {
 
   @override
   Widget build(BuildContext context) {
-    var dropdownvalue;
 
     return Scaffold(
       appBar: AppBar(
@@ -240,8 +241,8 @@ class _ProductupdateState extends State<Productupdate> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
+            SizedBox(height: 20,),
+            Card(
               child: SizedBox(
                 width: double.maxFinite,
                 child: DropdownButtonFormField<String>(
@@ -251,20 +252,20 @@ class _ProductupdateState extends State<Productupdate> {
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5)),
                     ),
-                    hint: Text('Categories'),
-                    value: dropdownvalue,
-                    items: _loaddata
+                    hint: Text('CATEGORY'),
+                    value: dropDownvalue,
+                    items: items
                         .map((type) => DropdownMenuItem<String>(
-                      value: type['id'].toString(),
+                      value: type.toString(),
                       child: Text(
-                        type['name'].toString(),
-                        style: TextStyle(color: Colors.black),
+                        type.toString(),
+                        style: TextStyle(color: Colors.black,fontSize: 16),
                       ),
                     ))
                         .toList(),
                     onChanged: (type) {
                       setState(() {
-                        dropdownvalue = type!;
+                        dropDownvalue=type;
                       });
                     }),
               ),
@@ -277,16 +278,18 @@ class _ProductupdateState extends State<Productupdate> {
                 children: [
                   ElevatedButton(
                     onPressed: (){
-                      _update(nameController.text,
+                      _update(
+                          nameController.text,
                           descriptionController.text,
                           sizeController.text,
                           priceController.text,
                           humidityController.text,
                           temperatureController.text,
                           categoryController.text,
-                          dropdownvalue);
+
+                      );
                     },
-                    child: Text("Edit",style: TextStyle(fontSize: 15, letterSpacing: 2, color: Colors.white),),
+                    child: Text("Update",style: TextStyle(fontSize: 15, letterSpacing: 2, color: Colors.white),),
                     style: ElevatedButton.styleFrom(
                         primary: Constants.primaryColor,
                         padding: EdgeInsets.symmetric(horizontal: 50,vertical: 25,),

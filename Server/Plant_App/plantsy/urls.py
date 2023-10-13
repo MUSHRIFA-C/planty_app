@@ -26,6 +26,7 @@ urlpatterns = [
 
                                 ####Order###
      path("placeOrder",views.PlaceOrderAPIView.as_view(),name="placeOrder"), 
+     path("viewAllOrders",views.ViewAllOrdersSerializerAPIView.as_view(),name="viewAllOrders"),                     
      path("viewOrders/<int:userId>",views.ViewOrdersSerializerAPIView.as_view(),name="viewOrders"),                     
      path("orderAddressSave/<int:id>",views.SaveOrderAddressAPIView.as_view(),name="orderAddressSave"),
      path("viewOrderAddress/<int:id>",views.ViewOrderAddressAPIView.as_view(),name="viewOrderAddress"),

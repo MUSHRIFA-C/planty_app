@@ -10,11 +10,6 @@ class ViewUserService {
       final url = APIConstants.url + APIConstants.viewuser;
       print('url$url');
       var response = await http.get(Uri.parse(url));
-
-      //print(APIConstants.url + APIConstants.viewuser);
-
-
-      //print("body$body");
       if (response.statusCode == 200) {
         var body = json.decode(response.body);
         print("body$body");

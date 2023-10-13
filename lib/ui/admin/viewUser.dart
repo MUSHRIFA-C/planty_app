@@ -95,8 +95,6 @@ class _ViewuserState extends State<Viewuser> {
             ),
           ) : Center(child: CircularProgressIndicator(),);
         },
-
-
       ),
     );
   }

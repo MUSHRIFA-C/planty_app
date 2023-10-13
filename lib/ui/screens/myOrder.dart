@@ -141,7 +141,7 @@ class _MyOrderState extends State<MyOrder> {
                                       constraints: BoxConstraints(
                                         maxWidth: itemWidth ,
                                       ),
-                                      child: Text(filterdlist[index].productName.toString(),style:
+                                      child: Text(filterdlist[index].totalPrice.toString(),style:
                                       const TextStyle(fontSize: 14,color: Colors.grey),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,

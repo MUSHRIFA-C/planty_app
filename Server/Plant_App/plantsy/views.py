@@ -191,7 +191,7 @@ class Update_productAPIView(GenericAPIView):
         if serializer.is_valid():
             serializer.save()
             
-            return Response({'message': 'updated data successfully', 'success':True}, status= status.HTTP_200_OK)
+            return Response({'message': 'updated data successfully', 'success':True,'data':serializer.data,}, status= status.HTTP_200_OK)
         else:
              return Response({'data':'Something went wrong','success':False},status=status.HTTP_400_BAD_REQUEST)
 
@@ -458,6 +458,14 @@ class PlaceOrderAPIView(GenericAPIView):
         return Response({'data': serializer_order.errors, 'message': 'Invalid', 'success': False},
                         status=status.HTTP_400_BAD_REQUEST)
 
+
+class ViewAllOrdersSerializerAPIView(GenericAPIView):
+    def get(self,request):
+        queryset=Order.objects.all().values()
+        serializer_data=list(queryset)
+        for obj in serializer_data:
+            obj['image'] =settings.MEDIA_URL+str(obj['image'])
+        return Response({'data':serializer_data,'message':'all order details','success':True},status=status.HTTP_200_OK)
 
 class ViewOrdersSerializerAPIView(GenericAPIView):
     def get(self,request,userId):

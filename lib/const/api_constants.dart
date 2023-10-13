@@ -1,5 +1,5 @@
 class APIConstants{
-  static const url="https://4116-49-15-201-18.ngrok-free.app";
+  static const url="https://ab2e-117-201-195-42.ngrok-free.app";
   static const login="/api/LoginAPIView";
   static const register="/api/UserRegisterAPIView";
   static const viewuser = "/api/ViewAllUserAPIView";
@@ -24,6 +24,7 @@ class APIConstants{
 
   static const ratePlants='/api/ratingplant/';
 
+  static const viewAllOrder='/api/viewAllOrders';
   static const viewOrder='/api/viewOrders/';
   static const placeOrder='/api/placeOrder';
 

@@ -6,16 +6,16 @@ import 'package:http/http.dart' as http;
 
 class ViewAdminOrder{
   Future<List<Data>> getOrderItems() async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int userId = (prefs.getInt('login_id') ?? 0 ) ;
-    final urls = APIConstants.url + APIConstants.viewOrder + userId.toString();
-    var response = await http.get(Uri.parse(urls));
-    print("view res$response");
-    if (response.statusCode == 200) {
-      var body = json.decode(response.body);
-      List<Data> data =  body['data'].map<Data>((e) => Data.fromJson(e)).toList();
-      return data;
 
+    final urls = APIConstants.url + APIConstants.viewAllOrder;
+    var response = await http.get(Uri.parse(urls));
+    var body = json.decode(response.body);
+    print("view body$body");
+    if (response.statusCode == 200) {
+      List<Data> data =  body['data'].map<Data>((e) => Data.fromJson(e)).toList();
+
+      print(data);
+      return data;
     } else {
       List<Data> data = [];
       return data;

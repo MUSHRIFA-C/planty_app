@@ -66,7 +66,7 @@ class DetailData {
     image = json['image'];
     category = json['category'];
     expdate = json['expdate'];
-    rating = json['rating'];
+    rating = json['rating']==null?0.0:json['rating'];
     ratingCount = json['rating_count'];
   }
 
