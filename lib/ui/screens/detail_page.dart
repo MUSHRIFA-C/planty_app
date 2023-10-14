@@ -41,10 +41,8 @@ class _DetailPageState extends State<DetailPage> {
   late SharedPreferences localStorage;
   late int loginId;
   late SharedPreferences prefs;
-
   List _favoritePlantItem=[];
   ViewCategoryApi viewCategoryApi = ViewCategoryApi();
-
   DetailData ? plantDetails;
 
   Future<void> _viewPro() async {
@@ -74,22 +72,30 @@ class _DetailPageState extends State<DetailPage> {
 
   Future<void> fetchFavoriteItems() async {
     List<Favorite> data = await ViewFavoriteItems().getFavoriteItems();
-    setState(() {
-      _favoritePlantItem = data.map((e) => e.item).toList();
-    });
+    if (mounted) {
+      setState(() {
+        _favoritePlantItem = data.map((e) => e.item).toList();
+      });
+    }
   }
 
-  Future<DetailData?> fetchPlantDetails(plantId) async {
+  Future<Product?> fetchPlantDetails(plantId) async {
     try {
       final details = await ViewUserplant.getPlants();
-      plantDetails = details as DetailData?;
+      plantDetails = details.detaildata as DetailData?;
       setState(() {
         print(plantDetails);
       });
     } catch (e) {
-      print('Failed to fetch pet details: $e');
+      print('Failed to fetch plant details: $e');
       return null;
     }
+  }
+
+  void updateRating(double newRating) {
+    setState(() {
+      rating = newRating;
+    });
   }
 
   @override
@@ -273,11 +279,11 @@ class _DetailPageState extends State<DetailPage> {
                                   size: 30.0,
                                   color: Constants.primaryColor);
                               },
-                              onRatingUpdate:(rating) async {
+                              onRatingUpdate:(newRating) async {
                                 if (plantDetails != null) {
-                                  await RatePlantAPI.ratePlants(
-                                      context, widget.plantId, rating);
-                                  await fetchPlantDetails(widget.plantId);
+                                  await RatePlantAPI.ratePlants(context, widget.plantId, newRating);
+                                  updateRating(newRating);
+                                  //await fetchPlantDetails(widget.plantId);
                                   print(rating);
                                 }
                               }

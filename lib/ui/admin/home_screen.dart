@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/constants.dart';
-import 'package:flutter_onboarding/ui/admin/new_product_screen.dart';
 import 'package:flutter_onboarding/ui/admin/notification.dart';
-import 'package:flutter_onboarding/ui/admin/orders_screen.dart';
 import 'package:flutter_onboarding/ui/admin/products_screen.dart';
 import 'package:flutter_onboarding/ui/admin/AdminOrders.dart';
 import 'package:flutter_onboarding/ui/admin/viewUser.dart';
@@ -16,10 +14,10 @@ class Homescreen extends StatefulWidget {
 }
 
 class _HomescreenState extends State<Homescreen> {
+
   TextEditingController searchController = TextEditingController();
 
   var _plantList;
-
   var index;
 
   @override
@@ -29,8 +27,19 @@ class _HomescreenState extends State<Homescreen> {
     Size size = MediaQuery.of(context).size;
 
 
-
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Constants.primaryColor,
+        title: Text('PLANTY'),
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()));
+            },
+            icon: Icon(Icons.logout_outlined),
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
@@ -45,46 +54,10 @@ class _HomescreenState extends State<Homescreen> {
                       horizontal: 16.0,
                     ),
                     width: size.width * .75,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.search,
-                          color: Colors.black54.withOpacity(.6),
-                        ),
-                        const Expanded(
-                          child: TextField(
-                            showCursor: false,
-                            decoration: InputDecoration(
-                              hintText: 'Search',
-                              border: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                        Icon(
-                          Icons.mic,
-                          color: Colors.black54.withOpacity(.6),
-                        ),
-                      ],
-                    ),
-                    decoration: BoxDecoration(
-                      color: Constants.primaryColor.withOpacity(.1),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
                   ),
-                    IconButton(onPressed: () {
-
-                      Navigator.push(
-                          context, MaterialPageRoute(
-                          builder: (context) => SignIn()));
-
-
-
-                    }, icon: Icon(Icons.logout_outlined))
                 ],
               ),
+              SizedBox(height: 30,),
               GridView.count(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),

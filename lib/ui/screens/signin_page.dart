@@ -11,8 +11,6 @@ import 'package:flutter_onboarding/ui/screens/widgets/custom_textfield.dart';
 import 'package:page_transition/page_transition.dart';
 
 class SignIn extends StatefulWidget {
-
-
   SignIn({Key? key}) : super(key: key);
 
   @override
@@ -25,6 +23,7 @@ class _SignInState extends State<SignIn> {
   TextEditingController passwordController = TextEditingController();
 
   bool passwordVisible=false;
+  bool _obscureText=false;
 
   @override
   Widget build(BuildContext context) {
@@ -56,40 +55,47 @@ class _SignInState extends State<SignIn> {
                 icon: Icons.alternate_email,
                 decoration: null,
               ),
-              CustomTextfield(
+            /*  CustomTextfield(
                 controller: passwordController,
-                obscureText: !passwordVisible,
+                obscureText: passwordVisible,
                 hintText: 'Enter Password',
                 icon: Icons.lock,
-                  decoration: InputDecoration(
-                    suffixIcon: IconButton(
-                    icon: Icon(passwordVisible ?
-                    Icons.visibility_off : Icons.visibility,
-                      color: Colors.teal.shade800,),
-                    onPressed: () {
-                      setState(
-                            () {
-                          passwordVisible = !passwordVisible;
-                        },
-                      );
+              ),
+              CustomTextfield(icon: Icons.lock,
+                obscureText: true, hintText: 'Enter Password', controller: passwordController, decoration: null,),*/
+          TextField(
+            controller:passwordController,
+            obscureText: passwordVisible,
+            style: TextStyle(
+              color: Constants.blackColor,
+            ),
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              suffixIcon: IconButton(
+                icon: Icon(passwordVisible ?
+                Icons.visibility_off : Icons.visibility,
+                  color: Constants.primaryColor,),
+                onPressed: () {
+                  setState(
+                        () {
+                      passwordVisible = !passwordVisible;
                     },
-                  ),
-                  ),
+                  );
+                },
               ),
-
-              const SizedBox(
-                height: 10,
-              ),
-
+              prefixIcon: Icon(Icons.lock,
+                color: Constants.blackColor.withOpacity(.3),),
+              hintText:'Enter Password',
+            ),
+            cursorColor: Constants.blackColor.withOpacity(.5),
+          ),
+              const SizedBox(height: 10,),
               GestureDetector(
                 onTap: () async{
-               //login();
                   Login user =  Login(
                       email: emailController.text.trim(),
                       password: passwordController.text.trim(),
-
                   );
-
                   await Api().login(context, user);
                 },
                 child: Container(

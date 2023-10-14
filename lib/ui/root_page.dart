@@ -4,6 +4,7 @@ import 'package:flutter_onboarding/constants.dart';
 import 'package:flutter_onboarding/models/plants.dart';
 import 'package:flutter_onboarding/models/product.dart';
 import 'package:flutter_onboarding/ui/screens/cart_page.dart';
+import 'package:flutter_onboarding/ui/screens/detail_page.dart';
 import 'package:flutter_onboarding/ui/screens/favorite_page.dart';
 import 'package:flutter_onboarding/ui/screens/home_page.dart';
 import 'package:flutter_onboarding/ui/screens/myOrder.dart';
@@ -95,11 +96,11 @@ class _RootPageState extends State<RootPage> {
           onTap: (index){
             setState(() {
               _bottomNavIndex = index;
-              /*final List<Product> favoritedPlants = Product.getFavoritedPlants();*/
-              //final List<AddtoCart> addedToCartPlants = AddtoCart.addedToCartPlants();
               Product();
-              //favorites = favoritedPlants;
-              //myCart = addedToCartPlants.toSet().toList();
+              FavoritePage();
+              CartPage();
+              MyOrder();
+              ProfilePage();
             });
           }
       ),

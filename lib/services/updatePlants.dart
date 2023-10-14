@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding/const/api_constants.dart';
 import 'package:flutter_onboarding/models/product.dart';
-import 'package:flutter_onboarding/models/user.dart';
 import 'package:flutter_onboarding/services/authdata.dart';
 import 'package:flutter_onboarding/ui/root_page.dart';
 import 'package:page_transition/page_transition.dart';

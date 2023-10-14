@@ -68,16 +68,20 @@ class _ProductupdateState extends State<Productupdate> {
   String humidity='';
   String temperature='';
   String category='';
+  double rating= 0.0;
+  String expdate='';
 
   late SharedPreferences prefs;
   TextEditingController nameController = TextEditingController();
   TextEditingController priceController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
   TextEditingController sizeController = TextEditingController();
   TextEditingController humidityController = TextEditingController();
   TextEditingController temperatureController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
   TextEditingController ratingController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
+  TextEditingController expdateController = TextEditingController();
+
 
 
   int currentTab = 2;
@@ -90,40 +94,48 @@ class _ProductupdateState extends State<Productupdate> {
 
     setState(() {
       name = body['data']['name'];
-      description = body['data']['description'];
       price = "${body['data']['price']} ₹"==null?'0' : "${body['data']['price']} ₹";
+      description = body['data']['description'];
       size = body['data']['size'];
       humidity = "${body['data']['humidity']} %"==null?'0' : "${body['data']['humidity']} %";
       temperature = "${body['data']['temparature']}°C"==null?'0':"${body['data']['temparature']}°C";
+      category= body['data']['category']==null?'Not found':body['data']['category'];
+      rating= body['data']['rating']==null?0.0:body['data']['rating'];
+      expdate= body['data']['expdate']==null?'Not found':body['data']['expdate'];
       print("tem$temperature");
 
       nameController.text = name;
+      priceController.text=price;
       descriptionController.text=description;
       sizeController.text=size;
-      priceController.text=price;
       humidityController.text=humidity;
       temperatureController.text=temperature;
+      dropDownvalue=category;
 
     });
   }
 
-  Future<void> _update(String name, String price,
+  Future<void> _updateplant(String name, String price,String expdate,
       String size, String description,
-      /*String rating,*/ String humidity,
+      double rating,String humidity,
       String temperature, String category,/*File? imageFile*/) async {
     int id=widget.id;
     prefs = await SharedPreferences.getInstance();
-    final urls = APIConstants.url + APIConstants.updateproduct + widget.id.toString();
 
-    var request = await http.MultipartRequest('PUT', Uri.parse(urls));
+    var uri = Uri.parse(APIConstants.url +'/api/Update_productAPIView/'+ widget.id.toString());
+    //final urls = APIConstants.url + APIConstants.updateproduct + widget.id.toString();
+
+    var request = await http.MultipartRequest('PUT', uri);
     request.fields["plantname"] = name;
-    request.fields["ptprice"] = price;
+    request.fields["price"] = price;
     request.fields["ptdescription"] = description;
     request.fields["ptsize"] = size;
     request.fields["pthumidity"] = humidity;
-    request.fields["pttemp"] = temperature;/*
-    request.fields["ptrating"] = rating;*/
+    request.fields["pttemp"] = temperature;
+    request.fields["ptrating"] = rating.toString();
     request.fields["category"] = category;
+    request.fields["expdate"] = expdate;
+
 
     print(request.fields);
 
@@ -138,7 +150,7 @@ class _ProductupdateState extends State<Productupdate> {
   }
 
   _deleteData(int id) async {
-    var res = await http.get(Uri.parse(APIConstants.deleteproduct));
+    var res = await Apiservice().deleteData('/api/Delete_productAPIView/' + widget.id.toString());
     if (res.statusCode == 200) {
       setState(() {
 
@@ -171,7 +183,7 @@ class _ProductupdateState extends State<Productupdate> {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [Constants.primaryColor],
+              colors: [Constants.primaryColor,Colors.white],
             ),
           ),
         ),
@@ -278,16 +290,22 @@ class _ProductupdateState extends State<Productupdate> {
                 children: [
                   ElevatedButton(
                     onPressed: (){
-                      _update(
-                          nameController.text,
-                          descriptionController.text,
-                          sizeController.text,
-                          priceController.text,
-                          humidityController.text,
-                          temperatureController.text,
-                          categoryController.text,
+                   _updateplant(nameController.text, priceController.text.replaceAll('₹', ''),
+                       expdate, sizeController.text, descriptionController.text,
+                       rating, humidityController.text.replaceAll('%', ''), temperatureController.text.replaceAll('°C', ''),
+                       dropDownvalue.toString());
+                    /* _update(
+                        nameController.text,
+                        priceController.text,
+                        descriptionController.text,
+                        sizeController.text,categoryController.text
+                        humidityController.text,
+                        temperatureController.text,
+                        ratingController.text,
+                        ,
+                        expdateController.text,
 
-                      );
+                      );*/
                     },
                     child: Text("Update",style: TextStyle(fontSize: 15, letterSpacing: 2, color: Colors.white),),
                     style: ElevatedButton.styleFrom(

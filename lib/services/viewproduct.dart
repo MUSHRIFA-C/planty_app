@@ -4,9 +4,8 @@ import 'package:flutter_onboarding/const/api_constants.dart';
 import 'package:flutter_onboarding/models/product.dart';
 
 class ViewProductService {
+
   static Future<Product> getProducts() async {
-
-
     try {
       final url = APIConstants.url+ APIConstants.viewproduct;
       print('url$url');
@@ -27,6 +26,7 @@ class ViewProductService {
       throw Exception('Error: $e');
     }
   }
+
   Future<Map<String, dynamic>> fetchData(int id) async {
 
     final urls = APIConstants.url + APIConstants.viewsingleproduct + id.toString();

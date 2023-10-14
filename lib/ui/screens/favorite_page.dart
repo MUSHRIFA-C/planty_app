@@ -5,6 +5,7 @@ import 'package:flutter_onboarding/constants.dart';
 import 'package:flutter_onboarding/models/favorite.dart';
 import 'package:flutter_onboarding/services/deleteFavoriteItem.dart';
 import 'package:flutter_onboarding/services/viewFavItem.dart';
+import 'package:flutter_onboarding/ui/root_page.dart';
 import 'package:flutter_onboarding/ui/screens/detail_page.dart';
 import 'package:flutter_onboarding/ui/screens/home_page.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -55,7 +56,7 @@ class _FavoritePageState extends State<FavoritePage> {
                   children: [
                     IconButton(
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>RootPage()));
                           },
                         icon: Icon(Icons.arrow_back)
                     ),

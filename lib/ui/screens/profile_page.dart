@@ -89,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   IconButton(
                     onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>RootPage()));
                     },
                     icon: Icon(Icons.arrow_back,size: 28,color: Colors.white,),
                   ),
