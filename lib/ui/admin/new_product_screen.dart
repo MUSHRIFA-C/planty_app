@@ -97,7 +97,6 @@ class _AaddproductsState extends State<Aaddproducts> {
   Widget build(BuildContext context) {
 
    // final Product newProduct = Product(data: Data());
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Constants.primaryColor,

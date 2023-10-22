@@ -294,18 +294,6 @@ class _ProductupdateState extends State<Productupdate> {
                        expdate, sizeController.text, descriptionController.text,
                        rating, humidityController.text.replaceAll('%', ''), temperatureController.text.replaceAll('°C', ''),
                        dropDownvalue.toString());
-                    /* _update(
-                        nameController.text,
-                        priceController.text,
-                        descriptionController.text,
-                        sizeController.text,categoryController.text
-                        humidityController.text,
-                        temperatureController.text,
-                        ratingController.text,
-                        ,
-                        expdateController.text,
-
-                      );*/
                     },
                     child: Text("Update",style: TextStyle(fontSize: 15, letterSpacing: 2, color: Colors.white),),
                     style: ElevatedButton.styleFrom(

@@ -9,7 +9,7 @@ class CustomTextfield extends StatefulWidget {
   final String hintText;
   final InputDecoration? decoration;
   final TextEditingController? controller;
-
+  final String? Function(String?)? validator;
 
   const CustomTextfield({
     Key? key,
@@ -18,6 +18,7 @@ class CustomTextfield extends StatefulWidget {
     required this.hintText,
     required this.controller,
     this.decoration,
+    this.validator,
 
   }) : super(key: key);
 
@@ -31,7 +32,7 @@ class _CustomTextfieldState extends State<CustomTextfield> {
   bool _obscureText=false;
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: widget.controller,
       obscureText: widget.obscureText,
       style: TextStyle(
@@ -39,12 +40,13 @@ class _CustomTextfieldState extends State<CustomTextfield> {
       ),
       decoration: InputDecoration(
         border: InputBorder.none,
-
-        prefixIcon: Icon(widget.icon,
+        prefixIcon: Icon(
+          widget.icon,
           color: Constants.blackColor.withOpacity(.3),),
         hintText: widget.hintText,
       ),
       cursorColor: Constants.blackColor.withOpacity(.5),
+      validator: widget.validator,
     );
   }
 }
